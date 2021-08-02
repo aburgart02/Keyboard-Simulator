@@ -45,7 +45,7 @@ class KeyboardSimulator(QWidget):
         self.accuracy_counter.adjustSize()
         self.left_field.update(self.right_field.typed_text)
         if len(self.right_field.type_text) != 0:
-            self.pixmap = QPixmap(str(ord(self.right_field.type_text[0])) + '.png')
+            self.pixmap = QPixmap((r'keyboards\k' + str(ord(self.right_field.type_text[0])) + '.png'))
             if self.width() == 1920:
                 self.pixmap = self.pixmap.scaled(self.pixmap.width() * 1.5, self.pixmap.height() * 1.5)
         self.picture_slot.setPixmap(self.pixmap)
