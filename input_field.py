@@ -1,3 +1,4 @@
+import settings
 from PyQt5 import QtCore
 from PyQt5.QtCore import QUrl
 from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent
@@ -24,7 +25,7 @@ class RightField(QLineEdit):
         self.sound_file = QUrl.fromLocalFile(r"sounds\error_sound.mp3")
         self.media_content = QMediaContent(self.sound_file)
         self.media_player.setMedia(self.media_content)
-        self.media_player.setVolume(50)
+        self.media_player.setVolume(settings.volume_level)
         self.time = QtCore.QTime(0, 0, 0)
         self.timer = QtCore.QTimer()
         self.timer_flag = False

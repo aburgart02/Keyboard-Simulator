@@ -1,3 +1,4 @@
+import settings
 from PyQt5.QtWidgets import QWidget, QPushButton, QFileDialog
 
 
@@ -14,6 +15,7 @@ class TextSelection(QWidget):
         self.eng_second_text = QPushButton("200 Characters", self)
         self.eng_third_text = QPushButton("300 Characters", self)
         self.my_text = QPushButton("Выбрать свой текст", self)
+        self.my_text.clicked.connect(self.get_text_file)
         self.configure_elements(1)
 
     def keyPressEvent(self, e):
@@ -38,7 +40,6 @@ class TextSelection(QWidget):
         self.eng_third_text.move(100 * ratio, 300 * ratio)
         self.eng_third_text.clicked.connect(lambda y: self.set_text(r'texts\eng_300.txt'))
         self.my_text.move(100 * ratio, 400 * ratio)
-        self.my_text.clicked.connect(self.get_text_file)
 
     def change_resolution(self, ratio):
         self.setFixedSize(1280 * ratio, 720 * ratio)
@@ -65,12 +66,10 @@ class TextSelection(QWidget):
     def get_text_file(self):
         path = QFileDialog.getOpenFileName()[0]
         with open(path, 'r') as f1:
-            with open(r'texts\buffer.txt', 'w') as f2:
-                f2.write(f1.read())
+            settings.text = f1.read()
         self.next_window = True
 
     def set_text(self, txt):
         with open(txt, 'r') as f1:
-            with open(r'texts\buffer.txt', 'w') as f2:
-                f2.write(f1.read())
+            settings.text = f1.read()
         self.next_window = True

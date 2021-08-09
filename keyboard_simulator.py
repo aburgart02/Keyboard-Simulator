@@ -1,3 +1,4 @@
+import settings
 from PyQt5 import QtGui, QtCore
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QWidget, QLabel
@@ -8,8 +9,7 @@ from settings import resolution, resolution_ratio
 class KeyboardSimulator(QWidget):
     def __init__(self, main):
         super().__init__(main)
-        with open(r'texts\buffer.txt', 'r') as f:
-            self.text = f.read()
+        self.text = settings.text
         self.right_field = RightField(self, self.text)
         self.left_field = LeftField(self)
         self.errors_counter = QLabel(self)
