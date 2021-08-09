@@ -2,6 +2,7 @@ from PyQt5 import QtGui, QtCore
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QWidget, QLabel
 from input_field import RightField, LeftField
+from settings import resolution, resolution_ratio
 
 
 class KeyboardSimulator(QWidget):
@@ -46,32 +47,35 @@ class KeyboardSimulator(QWidget):
         self.left_field.update(self.right_field.typed_text)
         if len(self.right_field.type_text) != 0:
             self.pixmap = QPixmap((r'keyboards\k' + str(ord(self.right_field.type_text[0])) + '.png'))
-            if self.width() == 1920:
-                self.pixmap = self.pixmap.scaled(self.pixmap.width() * 1.5, self.pixmap.height() * 1.5)
+            if self.width() == resolution.width():
+                self.pixmap = self.pixmap.scaled(self.pixmap.width() * resolution_ratio,
+                                                 self.pixmap.height() * resolution_ratio)
         self.picture_slot.setPixmap(self.pixmap)
         self.picture_slot.adjustSize()
 
-    def configure_elements(self, x):
-        self.errors_counter.move(60 * x, 30 * x)
-        self.errors_counter.setFont(QtGui.QFont("Arial", 12 * x, QtGui.QFont.Bold))
-        self.timer.move(270 * x, 30 * x)
-        self.timer.setFont(QtGui.QFont("Arial", 12 * x, QtGui.QFont.Bold))
-        self.progress_counter.move(470 * x, 30 * x)
-        self.progress_counter.setFont(QtGui.QFont("Arial", 12 * x, QtGui.QFont.Bold))
-        self.speed_counter.move(670 * x, 30 * x)
-        self.speed_counter.setFont(QtGui.QFont("Arial", 12 * x, QtGui.QFont.Bold))
-        self.text_size.move(910 * x, 30 * x)
-        self.text_size.setFont(QtGui.QFont("Arial", 12 * x, QtGui.QFont.Bold))
-        self.accuracy_counter.move(1110 * x, 30 * x)
-        self.accuracy_counter.setFont(QtGui.QFont("Arial", 12 * x, QtGui.QFont.Bold))
-        self.picture_slot.move(0, 240 * x)
+    def configure_elements(self, ratio):
+        self.errors_counter.move(60 * ratio, 30 * ratio)
+        self.errors_counter.setFont(QtGui.QFont("Arial", 12 * ratio, QtGui.QFont.Bold))
+        self.timer.move(270 * ratio, 30 * ratio)
+        self.timer.setFont(QtGui.QFont("Arial", 12 * ratio, QtGui.QFont.Bold))
+        self.progress_counter.move(470 * ratio, 30 * ratio)
+        self.progress_counter.setFont(QtGui.QFont("Arial", 12 * ratio, QtGui.QFont.Bold))
+        self.speed_counter.move(670 * ratio, 30 * ratio)
+        self.speed_counter.setFont(QtGui.QFont("Arial", 12 * ratio, QtGui.QFont.Bold))
+        self.text_size.move(910 * ratio, 30 * ratio)
+        self.text_size.setFont(QtGui.QFont("Arial", 12 * ratio, QtGui.QFont.Bold))
+        self.accuracy_counter.move(1110 * ratio, 30 * ratio)
+        self.accuracy_counter.setFont(QtGui.QFont("Arial", 12 * ratio, QtGui.QFont.Bold))
+        self.picture_slot.move(0, 240 * ratio)
 
-    def change_resolution(self, x):
-        self.setFixedSize(1280 * x, 720 * x)
-        self.configure_elements(x)
-        self.right_field.setGeometry(450 * x, 110 * x, 720 * x, 50 * x)
-        self.left_field.setGeometry(60 * x, 110 * x, 390 * x, 50 * x)
+    def change_resolution(self, ratio):
+        self.setFixedSize(1280 * ratio, 720 * ratio)
+        self.configure_elements(ratio)
+        self.right_field.setGeometry(450 * ratio, 110 * ratio, 720 * ratio, 50 * ratio)
+        self.left_field.setGeometry(60 * ratio, 110 * ratio, 390 * ratio, 50 * ratio)
         self.right_field.setStyleSheet('background : #abcdef; font-weight: 500; color: black; font-size:'
-                                       + str(24 * x) + 'pt; ''border: 2px solid green; border-width : 2px 2px 2px 2px;')
+                                       + str(24 * ratio) + 'pt; ''border: 2px solid green; '
+                                                           'border-width : 2px 2px 2px 2px;')
         self.left_field.setStyleSheet('background : #abcdef; font-weight: 500; color: grey; font-size:'
-                                      + str(24 * x) + 'pt; ''border: 2px solid green; border-width : 2px 0px 2px 2px;')
+                                      + str(24 * ratio) + 'pt; ''border: 2px solid green; '
+                                                          'border-width : 2px 0px 2px 2px;')

@@ -22,24 +22,24 @@ class KeyboardLayoutSelection(QWidget):
         if e.key() == 16777274:
             self.toggle_full_screen = True
 
-    def configure_elements(self, x):
-        self.text.move(420 * x, 45 * x)
-        self.text.setFont(QtGui.QFont("Arial", 16 * x, QtGui.QFont.Bold))
+    def configure_elements(self, ratio):
+        self.text.move(420 * ratio, 45 * ratio)
+        self.text.setFont(QtGui.QFont("Arial", 16 * ratio, QtGui.QFont.Bold))
         self.text.adjustSize()
-        self.first_text_button.move(130 * x**3, 120 * x)
+        self.first_text_button.move(130 * ratio ** 3, 120 * ratio)
         self.first_text_button.setFixedSize(1024, 268)
         self.first_text_button.setIcon(QIcon(r"keyboards\rus.png"))
         self.first_text_button.setIconSize(QSize(1024, 272))
-        self.first_text_button.clicked.connect(lambda y: self.select_keyboard_layout('rus'))
-        self.second_text_button.move(130 * x**3, 420 * x)
+        self.first_text_button.clicked.connect(lambda x: self.select_keyboard_layout('rus'))
+        self.second_text_button.move(130 * ratio ** 3, 420 * ratio)
         self.second_text_button.setFixedSize(1024, 268)
         self.second_text_button.setIcon(QIcon(r"keyboards\eng.png"))
         self.second_text_button.setIconSize(QSize(1024, 272))
-        self.second_text_button.clicked.connect(lambda y: self.select_keyboard_layout('eng'))
+        self.second_text_button.clicked.connect(lambda x: self.select_keyboard_layout('eng'))
 
-    def change_resolution(self, x):
-        self.setFixedSize(1280 * x, 720 * x)
-        self.configure_elements(x)
+    def change_resolution(self, ratio):
+        self.setFixedSize(1280 * ratio, 720 * ratio)
+        self.configure_elements(ratio)
 
     def select_keyboard_layout(self, language):
         self.next_window = True

@@ -22,27 +22,27 @@ class TextSelection(QWidget):
         if e.key() == 16777274:
             self.toggle_full_screen = True
 
-    def configure_elements(self, x):
-        self.rus_first_text.move(100 * x, 100 * x)
+    def configure_elements(self, ratio):
+        self.rus_first_text.move(100 * ratio, 100 * ratio)
         self.rus_first_text.clicked.connect(lambda y: self.set_text(r'texts\rus_100.txt'))
         self.rus_first_text.setStyleSheet('''background-color: green; border-style: outset; border-width: 2px; 
         border-radius: 4px; border-color: blue; font: bold 18px; min-width: 10em; padding: 6px; color: orange;''')
-        self.rus_second_text.move(100 * x, 200 * x)
+        self.rus_second_text.move(100 * ratio, 200 * ratio)
         self.rus_second_text.clicked.connect(lambda y: self.set_text(r'texts\rus_200.txt'))
-        self.rus_third_text.move(100 * x, 300 * x)
+        self.rus_third_text.move(100 * ratio, 300 * ratio)
         self.rus_third_text.clicked.connect(lambda y: self.set_text(r'texts\rus_300.txt'))
-        self.eng_first_text.move(100 * x, 100 * x)
+        self.eng_first_text.move(100 * ratio, 100 * ratio)
         self.eng_first_text.clicked.connect(lambda y: self.set_text(r'texts\eng_100.txt'))
-        self.eng_second_text.move(100 * x, 200 * x)
+        self.eng_second_text.move(100 * ratio, 200 * ratio)
         self.eng_second_text.clicked.connect(lambda y: self.set_text(r'texts\eng_200.txt'))
-        self.eng_third_text.move(100 * x, 300 * x)
+        self.eng_third_text.move(100 * ratio, 300 * ratio)
         self.eng_third_text.clicked.connect(lambda y: self.set_text(r'texts\eng_300.txt'))
-        self.my_text.move(100 * x, 400 * x)
+        self.my_text.move(100 * ratio, 400 * ratio)
         self.my_text.clicked.connect(self.get_text_file)
 
-    def change_resolution(self, x):
-        self.setFixedSize(1280 * x, 720 * x)
-        self.configure_elements(x)
+    def change_resolution(self, ratio):
+        self.setFixedSize(1280 * ratio, 720 * ratio)
+        self.configure_elements(ratio)
 
     def set_rus_texts(self):
         self.my_text.show()

@@ -19,16 +19,16 @@ class Settings(QWidget):
         if e.key() == 16777274:
             self.toggle_full_screen = True
 
-    def configure_elements(self, x):
-        self.background_text.move(100 * x, 100 * x)
-        self.previous_button.move(0 * x, 100 * x)
+    def configure_elements(self, ratio):
+        self.background_text.move(100 * ratio, 100 * ratio)
+        self.previous_button.move(0 * ratio, 100 * ratio)
         self.previous_button.clicked.connect(lambda y: self.set_background_file_name(False))
-        self.next_button.move(200 * x, 100 * x)
+        self.next_button.move(200 * ratio, 100 * ratio)
         self.next_button.clicked.connect(lambda y: self.set_background_file_name(True))
 
-    def change_resolution(self, x):
-        self.setFixedSize(1280 * x, 720 * x)
-        self.configure_elements(x)
+    def change_resolution(self, ratio):
+        self.setFixedSize(1280 * ratio, 720 * ratio)
+        self.configure_elements(ratio)
 
     def set_background_file_name(self, direction):
         if direction:
