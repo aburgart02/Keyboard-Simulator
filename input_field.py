@@ -50,7 +50,7 @@ class RightField(QLineEdit):
             else:
                 self.errors += 1
                 self.media_player.play()
-        except:
+        except ValueError:
             pass
 
     def set_register(self, c):

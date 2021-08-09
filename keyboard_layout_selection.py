@@ -23,16 +23,16 @@ class KeyboardLayoutSelection(QWidget):
             self.toggle_full_screen = True
 
     def configure_elements(self, ratio):
-        self.text.move(420 * ratio, 45 * ratio)
         self.text.setFont(QtGui.QFont("Arial", 16 * ratio, QtGui.QFont.Bold))
         self.text.adjustSize()
-        self.first_text_button.move(130 * ratio ** 3, 120 * ratio)
+        self.text.move((self.width() - self.text.width()) // 2, 45 * ratio)
         self.first_text_button.setFixedSize(1024, 268)
+        self.first_text_button.move((self.width() - self.first_text_button.width()) // 2, 120 * ratio)
         self.first_text_button.setIcon(QIcon(r"keyboards\rus.png"))
         self.first_text_button.setIconSize(QSize(1024, 272))
         self.first_text_button.clicked.connect(lambda x: self.select_keyboard_layout('rus'))
-        self.second_text_button.move(130 * ratio ** 3, 420 * ratio)
         self.second_text_button.setFixedSize(1024, 268)
+        self.second_text_button.move((self.width() - self.second_text_button.width()) // 2, 420 * ratio)
         self.second_text_button.setIcon(QIcon(r"keyboards\eng.png"))
         self.second_text_button.setIconSize(QSize(1024, 272))
         self.second_text_button.clicked.connect(lambda x: self.select_keyboard_layout('eng'))

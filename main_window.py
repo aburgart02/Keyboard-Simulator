@@ -60,30 +60,30 @@ class MainWindow(QWidget):
                 self.set_background(1)
 
     def configure_elements(self, ratio):
-        self.start_button.move(450 * ratio, 100 * ratio)
         self.start_button.clicked.connect(self.display_keyboard_layout_selection_window)
         self.start_button.setStyleSheet('background-color: blue; border-style: outset; border-width: 2px; '
                                         'border-radius: 10px; border-color: yellow; font: bold ' +
                                         str(int(28 * ratio)) + 'px; min-width: 10em; padding: 6px; color: red;')
         self.start_button.adjustSize()
-        self.progress_button.move(450 * ratio, 200 * ratio)
+        self.start_button.move((self.width() - self.start_button.width()) // 2, 100 * ratio)
         self.progress_button.setStyleSheet('background-color: blue; border-style: outset; border-width: 2px; '
                                            'border-radius: 10px; border-color: yellow; font: bold '
                                            + str(int(28 * ratio)) + 'px; min-width: 10em; padding: 6px; color: red;')
         self.progress_button.clicked.connect(self.close_application)
         self.progress_button.adjustSize()
-        self.settings_button.move(450 * ratio, 300 * ratio)
+        self.progress_button.move((self.width() - self.progress_button.width()) // 2, 200 * ratio)
         self.settings_button.setStyleSheet('background-color: blue; border-style: outset; border-width: 2px; '
                                            'border-radius: 10px; border-color: yellow; font: bold '
                                            + str(int(28 * ratio)) + 'px; min-width: 10em; padding: 6px; color: red;')
         self.settings_button.clicked.connect(self.display_settings_window)
         self.settings_button.adjustSize()
-        self.exit_button.move(450 * ratio, 400 * ratio)
+        self.settings_button.move((self.width() - self.settings_button.width()) // 2, 300 * ratio)
         self.exit_button.clicked.connect(self.close_application)
         self.exit_button.setStyleSheet('background-color: #6600ff; border-style: outset; border-width: 2px; '
                                        'border-radius: 10px; border-color: yellow; font: '
                                        + str(int(28 * ratio)) + 'px; min-width: 10em; padding: 6px; color: red;')
         self.exit_button.adjustSize()
+        self.exit_button.move((self.width() - self.exit_button.width()) // 2, 400 * ratio)
 
     def switch_windows(self):
         if self.keyboard_simulator_widget.right_field.previous_window:
