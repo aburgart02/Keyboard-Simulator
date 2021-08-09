@@ -5,7 +5,8 @@ from PyQt5.QtWidgets import QWidget, QPushButton
 from text_selection import TextSelection
 from keyboard_simulator import KeyboardSimulator
 from keyboard_layout_selection import KeyboardLayoutSelection
-from settings import Settings
+from settings_window import Settings
+from settings import resolution_ratio
 
 
 class MainWindow(QWidget):
@@ -54,7 +55,7 @@ class MainWindow(QWidget):
             self.background_file = self.settings_widget.background_file
             self.image = QImage(self.background_file)
             if self.isFullScreen():
-                self.set_background(1.5)
+                self.set_background(resolution_ratio)
             else:
                 self.set_background(1)
 
@@ -135,18 +136,18 @@ class MainWindow(QWidget):
             self.configure_elements(1)
         else:
             self.showFullScreen()
-            self.set_background(1.5)
-            self.configure_elements(1.5)
+            self.set_background(resolution_ratio)
+            self.configure_elements(resolution_ratio)
 
     def change_widget_resolution(self, widget, mode):
         if mode:
             if self.isFullScreen():
                 widget.change_resolution(1)
             else:
-                widget.change_resolution(1.5)
+                widget.change_resolution(resolution_ratio)
         else:
             if self.isFullScreen():
-                widget.change_resolution(1.5)
+                widget.change_resolution(resolution_ratio)
             else:
                 widget.change_resolution(1)
 
