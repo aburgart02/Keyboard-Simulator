@@ -6,6 +6,7 @@ class TextSelection(QWidget):
         super().__init__(main)
         self.next_window = False
         self.previous_window = False
+        self.toggle_full_screen = False
         self.rus_first_text = QPushButton("100 Символов", self)
         self.rus_second_text = QPushButton("200 Символов", self)
         self.rus_third_text = QPushButton("300 Символов", self)
@@ -13,29 +14,35 @@ class TextSelection(QWidget):
         self.eng_second_text = QPushButton("200 Characters", self)
         self.eng_third_text = QPushButton("300 Characters", self)
         self.my_text = QPushButton("Выбрать свой текст", self)
-        self.configure_elements()
+        self.configure_elements(1)
 
     def keyPressEvent(self, e):
         if e.key() == 16777216:
             self.previous_window = True
+        if e.key() == 16777274:
+            self.toggle_full_screen = True
 
-    def configure_elements(self):
-        self.rus_first_text.move(100, 100)
-        self.rus_first_text.clicked.connect(lambda x: self.set_text(r'texts\rus_100.txt'))
+    def configure_elements(self, x):
+        self.rus_first_text.move(100 * x, 100 * x)
+        self.rus_first_text.clicked.connect(lambda y: self.set_text(r'texts\rus_100.txt'))
         self.rus_first_text.setStyleSheet('''background-color: green; border-style: outset; border-width: 2px; 
         border-radius: 4px; border-color: blue; font: bold 18px; min-width: 10em; padding: 6px; color: orange;''')
-        self.rus_second_text.move(100, 200)
-        self.rus_second_text.clicked.connect(lambda x: self.set_text(r'texts\rus_200.txt'))
-        self.rus_third_text.move(100, 300)
-        self.rus_third_text.clicked.connect(lambda x: self.set_text(r'texts\rus_300.txt'))
-        self.eng_first_text.move(100, 100)
-        self.eng_first_text.clicked.connect(lambda x: self.set_text(r'texts\eng_100.txt'))
-        self.eng_second_text.move(100, 200)
-        self.eng_second_text.clicked.connect(lambda x: self.set_text(r'texts\eng_200.txt'))
-        self.eng_third_text.move(100, 300)
-        self.eng_third_text.clicked.connect(lambda x: self.set_text(r'texts\eng_300.txt'))
-        self.my_text.move(100, 400)
+        self.rus_second_text.move(100 * x, 200 * x)
+        self.rus_second_text.clicked.connect(lambda y: self.set_text(r'texts\rus_200.txt'))
+        self.rus_third_text.move(100 * x, 300 * x)
+        self.rus_third_text.clicked.connect(lambda y: self.set_text(r'texts\rus_300.txt'))
+        self.eng_first_text.move(100 * x, 100 * x)
+        self.eng_first_text.clicked.connect(lambda y: self.set_text(r'texts\eng_100.txt'))
+        self.eng_second_text.move(100 * x, 200 * x)
+        self.eng_second_text.clicked.connect(lambda y: self.set_text(r'texts\eng_200.txt'))
+        self.eng_third_text.move(100 * x, 300 * x)
+        self.eng_third_text.clicked.connect(lambda y: self.set_text(r'texts\eng_300.txt'))
+        self.my_text.move(100 * x, 400 * x)
         self.my_text.clicked.connect(self.get_text_file)
+
+    def change_resolution(self, x):
+        self.setFixedSize(1280 * x, 720 * x)
+        self.configure_elements(x)
 
     def set_rus_texts(self):
         self.my_text.show()

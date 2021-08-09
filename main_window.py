@@ -26,7 +26,7 @@ class MainWindow(QWidget):
         self.settings_widget = Settings(self)
         self.hide_windows()
         self.set_background(1)
-        self.configure_elements()
+        self.configure_elements(1)
         self.global_timer = QtCore.QTimer()
         self.global_timer.timeout.connect(self.switch_windows)
         self.global_timer.timeout.connect(self.check_windows_resolution)
@@ -36,7 +36,7 @@ class MainWindow(QWidget):
 
     def keyPressEvent(self, e):
         if e.key() == 16777274:
-            self.change_resolution()
+            self.change_main_window_resolution()
 
     def hide_windows(self):
         self.keyboard_layout_selection_widget.hide()
@@ -49,30 +49,46 @@ class MainWindow(QWidget):
         self.palette.setBrush(QPalette.Window, QBrush(self.background))
         self.setPalette(self.palette)
 
-    def configure_elements(self):
-        self.start_button.move(440, 100)
+    def change_background(self):
+        if self.settings_widget.background_file != self.background_file:
+            self.background_file = self.settings_widget.background_file
+            self.image = QImage(self.background_file)
+            if self.isFullScreen():
+                self.set_background(1.5)
+            else:
+                self.set_background(1)
+
+    def configure_elements(self, x):
+        self.start_button.move(450 * x, 100 * x)
         self.start_button.clicked.connect(self.display_keyboard_layout_selection_window)
-        self.start_button.setStyleSheet('''background-color: blue; border-style: outset; border-width: 2px; 
-        border-radius: 10px; border-color: yellow; font: bold 28px; min-width: 10em; padding: 6px; color: red;''')
-        self.progress_button.move(440, 200)
-        self.progress_button.setStyleSheet('''background-color: blue; border-style: outset; border-width: 2px; 
-        border-radius: 10px; border-color: yellow; font: bold 28px; min-width: 10em; padding: 6px; color: red;''')
+        self.start_button.setStyleSheet('background-color: blue; border-style: outset; border-width: 2px; '
+                                        'border-radius: 10px; border-color: yellow; font: bold ' + str(int(28 * x)) +
+                                        'px; min-width: 10em; padding: 6px; color: red;')
+        self.start_button.adjustSize()
+        self.progress_button.move(450 * x, 200 * x)
+        self.progress_button.setStyleSheet('background-color: blue; border-style: outset; border-width: 2px; '
+                                           'border-radius: 10px; border-color: yellow; font: bold ' + str(int(28 * x)) +
+                                           'px; min-width: 10em; padding: 6px; color: red;')
         self.progress_button.clicked.connect(self.close_application)
-        self.settings_button.move(440, 300)
-        self.settings_button.setStyleSheet('''background-color: blue; border-style: outset; border-width: 2px; 
-        border-radius: 10px; border-color: yellow; font: bold 28px; min-width: 10em; padding: 6px; color: red;''')
+        self.progress_button.adjustSize()
+        self.settings_button.move(450 * x, 300 * x)
+        self.settings_button.setStyleSheet('background-color: blue; border-style: outset; border-width: 2px; '
+                                           'border-radius: 10px; border-color: yellow; font: bold ' + str(int(28 * x)) +
+                                           'px; min-width: 10em; padding: 6px; color: red;')
         self.settings_button.clicked.connect(self.display_settings_window)
-        self.exit_button.move(440, 400)
+        self.settings_button.adjustSize()
+        self.exit_button.move(450 * x, 400 * x)
         self.exit_button.clicked.connect(self.close_application)
-        self.exit_button.setStyleSheet('''background-color: #6600ff; border-style: outset; border-width: 2px; 
-        border-radius: 10px; border-color: yellow; font: 28px; min-width: 10em; padding: 6px; color: red;''')
+        self.exit_button.setStyleSheet('background-color: #6600ff; border-style: outset; border-width: 2px; '
+                                       'border-radius: 10px; border-color: yellow; font: ' + str(int(28 * x)) +
+                                       'px; min-width: 10em; padding: 6px; color: red;')
+        self.exit_button.adjustSize()
 
     def switch_windows(self):
         if self.keyboard_simulator_widget.right_field.previous_window:
             self.keyboard_simulator_widget.close()
             self.keyboard_simulator_widget.right_field.previous_window = False
-            self.text_selection_widget.show()
-            self.text_selection_widget.setFocus()
+            self.display_text_selection_window()
         if self.text_selection_widget.next_window:
             self.text_selection_widget.hide()
             self.text_selection_widget.next_window = False
@@ -96,39 +112,46 @@ class MainWindow(QWidget):
 
     def check_windows_resolution(self):
         if self.keyboard_simulator_widget.right_field.toggle_full_screen:
-            if self.isFullScreen():
-                self.keyboard_simulator_widget.change_resolution(1)
-            else:
-                self.keyboard_simulator_widget.change_resolution(1.5)
-            self.change_resolution()
+            self.change_widget_resolution(self.keyboard_simulator_widget, True)
+            self.change_main_window_resolution()
             self.keyboard_simulator_widget.right_field.toggle_full_screen = False
         if self.keyboard_layout_selection_widget.toggle_full_screen:
-            if self.isFullScreen():
-                self.keyboard_layout_selection_widget.change_resolution(1)
-            else:
-                self.keyboard_layout_selection_widget.change_resolution(1.5)
-            self.change_resolution()
+            self.change_widget_resolution(self.keyboard_layout_selection_widget, True)
+            self.change_main_window_resolution()
             self.keyboard_layout_selection_widget.toggle_full_screen = False
+        if self.settings_widget.toggle_full_screen:
+            self.change_widget_resolution(self.settings_widget, True)
+            self.change_main_window_resolution()
+            self.settings_widget.toggle_full_screen = False
+        if self.text_selection_widget.toggle_full_screen:
+            self.change_widget_resolution(self.text_selection_widget, True)
+            self.change_main_window_resolution()
+            self.text_selection_widget.toggle_full_screen = False
 
-    def change_resolution(self):
+    def change_main_window_resolution(self):
         if self.isFullScreen():
             self.showNormal()
             self.set_background(1)
+            self.configure_elements(1)
         else:
             self.showFullScreen()
             self.set_background(1.5)
+            self.configure_elements(1.5)
 
-    def change_background(self):
-        if self.settings_widget.background_file != self.background_file:
-            self.background_file = self.settings_widget.background_file
-            self.image = QImage(self.background_file)
+    def change_widget_resolution(self, widget, mode):
+        if mode:
             if self.isFullScreen():
-                self.set_background(1.5)
+                widget.change_resolution(1)
             else:
-                self.set_background(1)
+                widget.change_resolution(1.5)
+        else:
+            if self.isFullScreen():
+                widget.change_resolution(1.5)
+            else:
+                widget.change_resolution(1)
 
-    def display_main_window(self, status):
-        if status:
+    def display_main_window(self, mode):
+        if mode:
             self.start_button.show()
             self.progress_button.show()
             self.settings_button.show()
@@ -141,22 +164,24 @@ class MainWindow(QWidget):
 
     def display_keyboard_simulator_window(self):
         self.keyboard_simulator_widget = KeyboardSimulator(self)
-        if self.isFullScreen():
-            self.keyboard_simulator_widget.change_resolution(1.5)
+        self.change_widget_resolution(self.keyboard_simulator_widget, False)
         self.keyboard_simulator_widget.show()
         self.keyboard_simulator_widget.right_field.setFocus()
 
     def display_keyboard_layout_selection_window(self):
+        self.change_widget_resolution(self.keyboard_layout_selection_widget, False)
         self.display_main_window(False)
         self.keyboard_layout_selection_widget.show()
         self.keyboard_layout_selection_widget.setFocus()
 
     def display_settings_window(self):
+        self.change_widget_resolution(self.settings_widget, False)
         self.display_main_window(False)
         self.settings_widget.show()
         self.settings_widget.setFocus()
 
     def display_text_selection_window(self):
+        self.change_widget_resolution(self.text_selection_widget, False)
         self.text_selection_widget.show()
         if self.keyboard_layout_selection_widget.keyboard_layout == 'rus':
             self.text_selection_widget.set_rus_texts()
