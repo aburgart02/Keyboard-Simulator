@@ -15,6 +15,7 @@ class RightField(QLineEdit):
         self.toggle_full_screen = False
         self.previous_window = False
         self.is_uppercase = False
+        self.next_symbol = False
         self.setText(self.type_text)
         self.setCursorPosition(0)
         self.setReadOnly(True)
@@ -44,6 +45,7 @@ class RightField(QLineEdit):
                 self.is_uppercase = True
             if self.set_register(chr(e.key())) == self.type_text[0]:
                 self.type_text = self.type_text[1:]
+                self.next_symbol = True
                 self.setText(self.type_text)
                 self.setCursorPosition(0)
                 self.typed_text += self.set_register(chr(e.key()))

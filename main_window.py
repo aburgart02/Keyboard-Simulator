@@ -186,8 +186,10 @@ class MainWindow(QWidget):
         self.text_selection_widget.show()
         if self.keyboard_layout_selection_widget.keyboard_layout == 'rus':
             self.text_selection_widget.set_rus_texts()
+            self.keyboard_simulator_widget.text_language = 0
         else:
             self.text_selection_widget.set_eng_texts()
+            self.keyboard_simulator_widget.text_language = 1
         self.text_selection_widget.setFocus()
 
     def close_application(self):

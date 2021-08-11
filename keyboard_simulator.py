@@ -3,13 +3,14 @@ from PyQt5 import QtGui, QtCore
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtWidgets import QWidget, QLabel
 from input_field import RightField, LeftField
-from settings import resolution, resolution_ratio
+from settings import resolution, codes
 
 
 class KeyboardSimulator(QWidget):
     def __init__(self, main):
         super().__init__(main)
         self.text = settings.text
+        self.text_language = 0
         self.right_field = RightField(self, self.text)
         self.left_field = LeftField(self)
         self.errors_counter = QLabel(self)
@@ -45,12 +46,16 @@ class KeyboardSimulator(QWidget):
                                                   / (self.right_field.index + self.right_field.errors + 0.001))) + "%")
         self.accuracy_counter.adjustSize()
         self.left_field.update(self.right_field.typed_text)
-        if len(self.right_field.type_text) != 0:
-            self.pixmap = QPixmap((r'keyboards\k' + str(ord(self.right_field.type_text[0])) + '.png'))
+        if len(self.right_field.type_text) != 0 and self.right_field.next_symbol:
+            self.pixmap = QPixmap((r'keyboards\k'
+                                   + str(codes[self.right_field.type_text.lower()[0]][self.text_language]) + '.png'))
+            if self.width() == 1280:
+                self.picture_slot.setPixmap(self.pixmap.scaled(1280, self.pixmap.height()
+                                                               // (self.pixmap.width() / 1280)))
             if self.width() == resolution.width():
-                self.pixmap = self.pixmap.scaled(self.pixmap.width() * resolution_ratio,
-                                                 self.pixmap.height() * resolution_ratio)
-        self.picture_slot.setPixmap(self.pixmap)
+                self.picture_slot.setPixmap(self.pixmap.scaled(resolution.width(), self.pixmap.height()
+                                                               // (self.pixmap.width() / resolution.width())))
+            self.right_field.next_symbol = False
         self.picture_slot.adjustSize()
 
     def configure_elements(self, ratio):
