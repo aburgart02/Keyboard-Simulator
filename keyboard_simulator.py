@@ -47,16 +47,19 @@ class KeyboardSimulator(QWidget):
         self.accuracy_counter.adjustSize()
         self.left_field.update(self.right_field.typed_text)
         if len(self.right_field.type_text) != 0 and self.right_field.next_symbol:
-            self.pixmap = QPixmap((r'keyboards\k'
-                                   + str(codes[self.right_field.type_text.lower()[0]][self.text_language]) + '.png'))
-            if self.width() == 1280:
-                self.picture_slot.setPixmap(self.pixmap.scaled(1280, self.pixmap.height()
-                                                               // (self.pixmap.width() / 1280)))
-            if self.width() == resolution.width():
-                self.picture_slot.setPixmap(self.pixmap.scaled(resolution.width(), self.pixmap.height()
-                                                               // (self.pixmap.width() / resolution.width())))
+            self.set_keyboard_picture()
             self.right_field.next_symbol = False
         self.picture_slot.adjustSize()
+
+    def set_keyboard_picture(self):
+        self.pixmap = QPixmap((r'keyboards\k'
+                               + str(codes[self.right_field.type_text.lower()[0]][self.text_language]) + '.png'))
+        if self.width() == 1280:
+            self.picture_slot.setPixmap(self.pixmap.scaled(1280, self.pixmap.height()
+                                                           // (self.pixmap.width() / 1280)))
+        if self.width() == resolution.width():
+            self.picture_slot.setPixmap(self.pixmap.scaled(resolution.width(), self.pixmap.height()
+                                                           // (self.pixmap.width() / resolution.width())))
 
     def configure_elements(self, ratio):
         self.errors_counter.move(60 * ratio, 30 * ratio)
@@ -84,3 +87,4 @@ class KeyboardSimulator(QWidget):
         self.left_field.setStyleSheet('background : #abcdef; font-weight: 500; color: grey; font-size:'
                                       + str(24 * ratio) + 'pt; ''border: 2px solid green; '
                                                           'border-width : 2px 0px 2px 2px;')
+        self.set_keyboard_picture()
