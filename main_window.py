@@ -1,4 +1,3 @@
-import settings
 from PyQt5 import QtCore
 from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QImage, QPalette, QBrush
@@ -24,7 +23,7 @@ class MainWindow(QWidget):
         self.exit_button = QPushButton("Exit", self)
         self.keyboard_layout_selection_widget = KeyboardLayoutSelection(self)
         self.text_selection_widget = TextSelection(self)
-        self.keyboard_simulator_widget = KeyboardSimulator(self, settings.text_language)
+        self.keyboard_simulator_widget = KeyboardSimulator(self)
         self.settings_widget = Settings(self)
         self.hide_windows()
         self.set_background(1)
@@ -165,7 +164,7 @@ class MainWindow(QWidget):
             self.exit_button.hide()
 
     def display_keyboard_simulator_window(self):
-        self.keyboard_simulator_widget = KeyboardSimulator(self, settings.text_language)
+        self.keyboard_simulator_widget = KeyboardSimulator(self)
         self.change_widget_resolution(self.keyboard_simulator_widget, False)
         self.keyboard_simulator_widget.show()
         self.keyboard_simulator_widget.right_field.setFocus()
@@ -187,12 +186,8 @@ class MainWindow(QWidget):
         self.text_selection_widget.show()
         if self.keyboard_layout_selection_widget.keyboard_layout == 'rus':
             self.text_selection_widget.set_rus_texts()
-            self.keyboard_simulator_widget.text_language = 0
-            settings.text_language = 0
         else:
             self.text_selection_widget.set_eng_texts()
-            self.keyboard_simulator_widget.text_language = 1
-            settings.text_language = 1
         self.text_selection_widget.setFocus()
 
     def close_application(self):

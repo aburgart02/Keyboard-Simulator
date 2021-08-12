@@ -80,9 +80,9 @@ class TextSelection(QWidget):
 
     def assign_buttons(self):
         for k in range(len(self.rus_texts) - 2):
-            self.rus_texts[k].clicked.connect(partial(self.set_text, r'texts\rus_texts\t' + str(k) + '.txt'))
+            self.rus_texts[k].clicked.connect(partial(self.set_text, r'texts\rus_texts\t' + str(k) + '.txt', k, 0))
         for k in range(len(self.eng_texts) - 2):
-            self.eng_texts[k].clicked.connect(partial(self.set_text, r'texts\eng_texts\t' + str(k) + '.txt'))
+            self.eng_texts[k].clicked.connect(partial(self.set_text, r'texts\eng_texts\t' + str(k) + '.txt', k, 1))
         self.rus_my_text.clicked.connect(self.get_text_file)
         self.eng_my_text.clicked.connect(self.get_text_file)
         self.rus_random_text.clicked.connect(lambda x: self.create_text(r'texts\rus_texts\rus_words.txt'))
@@ -115,7 +115,9 @@ class TextSelection(QWidget):
             settings.text = f1.read()
         self.next_window = True
 
-    def set_text(self, txt):
-        with open(txt, 'r') as f1:
+    def set_text(self, path, text_id, text_language):
+        with open(path, 'r') as f1:
             settings.text = f1.read()
+            settings.text_language = text_language
+            settings.text_id = text_id
         self.next_window = True

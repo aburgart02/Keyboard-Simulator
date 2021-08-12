@@ -1,3 +1,4 @@
+import json
 import settings
 from PyQt5 import QtGui, QtCore
 from PyQt5.QtGui import QPixmap
@@ -7,10 +8,11 @@ from settings import resolution, codes
 
 
 class KeyboardSimulator(QWidget):
-    def __init__(self, main, language):
+    def __init__(self, main):
         super().__init__(main)
         self.text = settings.text
-        self.text_language = language
+        self.text_id = settings.text_id
+        self.text_language = settings.text_language
         self.right_field = RightField(self, self.text)
         self.left_field = LeftField(self)
         self.errors_counter = QLabel(self)
@@ -28,7 +30,7 @@ class KeyboardSimulator(QWidget):
 
     def update_data(self):
         if len(self.right_field.type_text) == 0:
-            self.global_timer.stop()
+            self.finish_printing()
         self.errors_counter.setText("Число ошибок: " + str(self.right_field.errors))
         self.errors_counter.adjustSize()
         self.timer.setText("Время: " + self.right_field.time.toString())
@@ -50,6 +52,22 @@ class KeyboardSimulator(QWidget):
             self.set_keyboard_picture()
             self.right_field.next_symbol = False
         self.picture_slot.adjustSize()
+
+    def finish_printing(self):
+        self.global_timer.stop()
+        with open(r'progress\progress.txt', 'r') as f:
+            data = f.readlines()
+        progress_rus = json.loads(data[0])
+        progress_eng = json.loads(data[1])
+        if self.text_id < 10:
+            if self.text_language == 0:
+                progress_rus[self.text_id] = 1
+            else:
+                progress_eng[self.text_id] = 1
+        with open(r'progress\progress.txt', 'w') as f:
+            f.write(json.dumps(progress_rus))
+            f.write('\n')
+            f.write(json.dumps(progress_eng))
 
     def set_keyboard_picture(self):
         self.pixmap = QPixmap((r'keyboards\k'

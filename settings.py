@@ -4,6 +4,7 @@ from PyQt5.QtWidgets import QDesktopWidget, QApplication
 
 text = 'text'
 text_language = 0
+text_id = None
 volume_level = 50
 app = QApplication(sys.argv)
 resolution = QDesktopWidget().availableGeometry()
