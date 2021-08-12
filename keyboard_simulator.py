@@ -7,10 +7,10 @@ from settings import resolution, codes
 
 
 class KeyboardSimulator(QWidget):
-    def __init__(self, main):
+    def __init__(self, main, language):
         super().__init__(main)
         self.text = settings.text
-        self.text_language = 0
+        self.text_language = language
         self.right_field = RightField(self, self.text)
         self.left_field = LeftField(self)
         self.errors_counter = QLabel(self)
