@@ -1,6 +1,9 @@
 import settings
 import random
+import json
 from PyQt5.QtWidgets import QWidget, QPushButton, QFileDialog
+from PyQt5.QtCore import QSize
+from PyQt5.QtGui import QIcon
 from functools import partial
 
 
@@ -12,6 +15,8 @@ class TextSelection(QWidget):
         self.toggle_full_screen = False
         self.initialize_rus_texts()
         self.initialize_eng_texts()
+        self.mark_picture = QIcon(r'materials\mark.png')
+        self.cross_picture = QIcon(r'materials\cross.png')
         self.assign_buttons()
         self.configure_elements(1)
 
@@ -22,16 +27,16 @@ class TextSelection(QWidget):
             self.toggle_full_screen = True
 
     def initialize_rus_texts(self):
-        self.rus_lesson_1 = QPushButton("Урок 1", self)
-        self.rus_lesson_2 = QPushButton("Урок 2", self)
-        self.rus_lesson_3 = QPushButton("Урок 3", self)
-        self.rus_lesson_4 = QPushButton("Урок 4", self)
-        self.rus_lesson_5 = QPushButton("Урок 5", self)
-        self.rus_lesson_6 = QPushButton("Урок 6", self)
-        self.rus_lesson_7 = QPushButton("Урок 7", self)
-        self.rus_lesson_8 = QPushButton("Урок 8", self)
-        self.rus_lesson_9 = QPushButton("Урок 9", self)
-        self.rus_lesson_10 = QPushButton("Урок 10", self)
+        self.rus_lesson_1 = QPushButton("       Урок 1", self)
+        self.rus_lesson_2 = QPushButton("       Урок 2", self)
+        self.rus_lesson_3 = QPushButton("       Урок 3", self)
+        self.rus_lesson_4 = QPushButton("       Урок 4", self)
+        self.rus_lesson_5 = QPushButton("       Урок 5", self)
+        self.rus_lesson_6 = QPushButton("       Урок 6", self)
+        self.rus_lesson_7 = QPushButton("       Урок 7", self)
+        self.rus_lesson_8 = QPushButton("       Урок 8", self)
+        self.rus_lesson_9 = QPushButton("       Урок 9", self)
+        self.rus_lesson_10 = QPushButton("       Урок 10", self)
         self.rus_text_1 = QPushButton("100 Символов", self)
         self.rus_text_2 = QPushButton("200 Символов", self)
         self.rus_text_3 = QPushButton("300 Символов", self)
@@ -43,16 +48,16 @@ class TextSelection(QWidget):
                           self.rus_text_3, self.rus_random_text, self.rus_my_text]
 
     def initialize_eng_texts(self):
-        self.eng_lesson_1 = QPushButton("Lesson 1", self)
-        self.eng_lesson_2 = QPushButton("Lesson 2", self)
-        self.eng_lesson_3 = QPushButton("Lesson 3", self)
-        self.eng_lesson_4 = QPushButton("Lesson 4", self)
-        self.eng_lesson_5 = QPushButton("Lesson 5", self)
-        self.eng_lesson_6 = QPushButton("Lesson 6", self)
-        self.eng_lesson_7 = QPushButton("Lesson 7", self)
-        self.eng_lesson_8 = QPushButton("Lesson 8", self)
-        self.eng_lesson_9 = QPushButton("Lesson 9", self)
-        self.eng_lesson_10 = QPushButton("Lesson 10", self)
+        self.eng_lesson_1 = QPushButton("       Lesson 1", self)
+        self.eng_lesson_2 = QPushButton("       Lesson 2", self)
+        self.eng_lesson_3 = QPushButton("       Lesson 3", self)
+        self.eng_lesson_4 = QPushButton("       Lesson 4", self)
+        self.eng_lesson_5 = QPushButton("       Lesson 5", self)
+        self.eng_lesson_6 = QPushButton("       Lesson 6", self)
+        self.eng_lesson_7 = QPushButton("       Lesson 7", self)
+        self.eng_lesson_8 = QPushButton("       Lesson 8", self)
+        self.eng_lesson_9 = QPushButton("       Lesson 9", self)
+        self.eng_lesson_10 = QPushButton("       Lesson 10", self)
         self.eng_text_1 = QPushButton("100 Characters", self)
         self.eng_text_2 = QPushButton("200 Characters", self)
         self.eng_text_3 = QPushButton("300 Characters", self)
@@ -64,19 +69,40 @@ class TextSelection(QWidget):
                           self.eng_text_3, self.eng_random_text, self.eng_my_text]
 
     def configure_elements(self, ratio):
+        with open(r'progress\progress.txt', 'r') as f:
+            data = f.readlines()
+        progress_rus = json.loads(data[0])
+        progress_eng = json.loads(data[1])
         for buttons in [self.rus_texts, self.eng_texts]:
+            count = 0
             row = 1
             column = 1
             for button in buttons:
                 if row / 5 > 1:
                     column += 1
                     row = 1
-                button.move(270 * ratio * column, 100 * ratio * row)
+                button.move(360 * ratio * column - 240 * ratio, 100 * ratio * row)
                 button.setStyleSheet('background-color: green; border-style: outset; border-width: 2px; '
-                                     'border-radius: 4px; border-color: blue; font: bold ' + str(int(16 * ratio))
+                                     'border-radius: 4px; border-color: blue; font: bold ' + str(int(26 * ratio))
                                      + 'px; min-width: 10em; padding: 6px; color: orange;')
+                if count < 10:
+                    self.set_icon(button, count, ratio, progress_rus, progress_eng)
                 button.adjustSize()
                 row += 1
+                count += 1
+
+    def set_icon(self, button, count, ratio, progress_rus, progress_eng):
+        if button in self.rus_texts:
+            if progress_rus[count]:
+                button.setIcon(self.mark_picture)
+            else:
+                button.setIcon(self.cross_picture)
+        if button in self.eng_texts:
+            if progress_eng[count]:
+                button.setIcon(self.mark_picture)
+            else:
+                button.setIcon(self.cross_picture)
+        button.setIconSize(QSize(30 * ratio, 30 * ratio))
 
     def assign_buttons(self):
         for k in range(len(self.rus_texts) - 2):
