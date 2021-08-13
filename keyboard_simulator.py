@@ -29,8 +29,6 @@ class KeyboardSimulator(QWidget):
         self.global_timer.start(10)
 
     def update_data(self):
-        if len(self.right_field.type_text) == 0:
-            self.finish_printing()
         self.errors_counter.setText("Число ошибок: " + str(self.right_field.errors))
         self.errors_counter.adjustSize()
         self.timer.setText("Время: " + self.right_field.time.toString())
@@ -48,6 +46,8 @@ class KeyboardSimulator(QWidget):
                                                   / (self.right_field.index + self.right_field.errors + 0.001))) + "%")
         self.accuracy_counter.adjustSize()
         self.left_field.update(self.right_field.typed_text)
+        if len(self.right_field.type_text) == 0:
+            self.finish_printing()
         if len(self.right_field.type_text) != 0 and self.right_field.next_symbol:
             self.set_keyboard_picture()
             self.right_field.next_symbol = False
@@ -59,15 +59,25 @@ class KeyboardSimulator(QWidget):
             data = f.readlines()
         progress_rus = json.loads(data[0])
         progress_eng = json.loads(data[1])
+        rus_max_speed = json.loads(data[2])
+        eng_max_speed = json.loads(data[3])
         if self.text_id is not None and self.text_id < 10:
             if self.text_language == 0:
                 progress_rus[self.text_id] = 1
             else:
                 progress_eng[self.text_id] = 1
+        if int(self.speed_counter.text().split()[3]) > rus_max_speed and self.text_language == 0:
+            rus_max_speed = int(self.speed_counter.text().split()[3])
+        if int(self.speed_counter.text().split()[3]) > eng_max_speed and self.text_language == 1:
+            eng_max_speed = int(self.speed_counter.text().split()[3])
         with open(r'progress\progress.txt', 'w') as f:
             f.write(json.dumps(progress_rus))
             f.write('\n')
             f.write(json.dumps(progress_eng))
+            f.write('\n')
+            f.write(json.dumps(rus_max_speed))
+            f.write('\n')
+            f.write(json.dumps(eng_max_speed))
 
     def set_keyboard_picture(self):
         self.pixmap = QPixmap((r'keyboards\k'

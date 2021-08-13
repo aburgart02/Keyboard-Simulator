@@ -111,8 +111,8 @@ class TextSelection(QWidget):
             self.eng_texts[k].clicked.connect(partial(self.set_text, r'texts\eng_texts\t' + str(k) + '.txt', k, 1))
         self.rus_my_text.clicked.connect(self.get_text_file)
         self.eng_my_text.clicked.connect(self.get_text_file)
-        self.rus_random_text.clicked.connect(lambda x: self.create_text(r'texts\rus_texts\rus_words.txt'))
-        self.eng_random_text.clicked.connect(lambda x: self.create_text(r'texts\eng_texts\eng_words.txt'))
+        self.rus_random_text.clicked.connect(lambda x: self.create_text(r'texts\rus_texts\rus_words.txt', 0))
+        self.eng_random_text.clicked.connect(lambda x: self.create_text(r'texts\eng_texts\eng_words.txt', 1))
 
     def change_resolution(self, ratio):
         self.setFixedSize(1280 * ratio, 720 * ratio)
@@ -126,13 +126,14 @@ class TextSelection(QWidget):
         [text.show() for text in self.eng_texts]
         [text.hide() for text in self.rus_texts]
 
-    def create_text(self, path):
+    def create_text(self, path, text_language):
         text = ''
         with open(path, 'r', encoding='utf-8') as f:
             words = f.read().split('\n')
         for _ in range(0, 30):
             text += words[random.randint(0, len(words) - 1)] + ' '
         settings.text = text.strip()
+        settings.text_language = text_language
         self.next_window = True
 
     def get_text_file(self):
