@@ -59,7 +59,7 @@ class KeyboardSimulator(QWidget):
             data = f.readlines()
         progress_rus = json.loads(data[0])
         progress_eng = json.loads(data[1])
-        if self.text_id < 10:
+        if self.text_id is not None and self.text_id < 10:
             if self.text_language == 0:
                 progress_rus[self.text_id] = 1
             else:
