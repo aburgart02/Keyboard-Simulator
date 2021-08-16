@@ -11,7 +11,7 @@ class KeyboardLayoutSelection(QWidget):
         self.previous_window = False
         self.toggle_full_screen = False
         self.keyboard_layout = ''
-        self.text = QLabel("Выберите раскладку клавиатуры", self)
+        self.text = QLabel("Choose a keyboard layout", self)
         self.first_text_button = QPushButton(self)
         self.second_text_button = QPushButton(self)
         self.configure_elements(1)
@@ -23,7 +23,7 @@ class KeyboardLayoutSelection(QWidget):
             self.toggle_full_screen = True
 
     def configure_elements(self, ratio):
-        self.text.setFont(QtGui.QFont("Arial", 16 * ratio, QtGui.QFont.Bold))
+        self.text.setFont(QtGui.QFont("Arial", 22 * ratio, QtGui.QFont.Bold))
         self.text.adjustSize()
         self.text.move((self.width() - self.text.width()) // 2, 45 * ratio)
         self.first_text_button.setFixedSize(1024, 268)

@@ -37,9 +37,9 @@ class TextSelection(QWidget):
         self.rus_lesson_8 = QPushButton("       Урок 8", self)
         self.rus_lesson_9 = QPushButton("       Урок 9", self)
         self.rus_lesson_10 = QPushButton("       Урок 10", self)
-        self.rus_text_1 = QPushButton("100 Символов", self)
-        self.rus_text_2 = QPushButton("200 Символов", self)
-        self.rus_text_3 = QPushButton("300 Символов", self)
+        self.rus_text_1 = QPushButton("Короткий книжный текст", self)
+        self.rus_text_2 = QPushButton("Средний книжный текст", self)
+        self.rus_text_3 = QPushButton("Длинный книжный текст", self)
         self.rus_random_text = QPushButton("Случайный текст", self)
         self.rus_my_text = QPushButton("Выбрать свой текст", self)
         self.rus_texts = [self.rus_lesson_1, self.rus_lesson_2, self.rus_lesson_3, self.rus_lesson_4,
@@ -58,9 +58,9 @@ class TextSelection(QWidget):
         self.eng_lesson_8 = QPushButton("       Lesson 8", self)
         self.eng_lesson_9 = QPushButton("       Lesson 9", self)
         self.eng_lesson_10 = QPushButton("       Lesson 10", self)
-        self.eng_text_1 = QPushButton("100 Characters", self)
-        self.eng_text_2 = QPushButton("200 Characters", self)
-        self.eng_text_3 = QPushButton("300 Characters", self)
+        self.eng_text_1 = QPushButton("Short literary text", self)
+        self.eng_text_2 = QPushButton("Average literary text", self)
+        self.eng_text_3 = QPushButton("Long literary text", self)
         self.eng_random_text = QPushButton("Random text", self)
         self.eng_my_text = QPushButton("Choose your own text", self)
         self.eng_texts = [self.eng_lesson_1, self.eng_lesson_2, self.eng_lesson_3, self.eng_lesson_4,
@@ -82,9 +82,9 @@ class TextSelection(QWidget):
                     column += 1
                     row = 1
                 button.move(360 * ratio * column - 240 * ratio, 100 * ratio * row)
-                button.setStyleSheet('background-color: green; border-style: outset; border-width: 2px; '
+                button.setStyleSheet('background-color: #570290; border-style: outset; border-width: 2px; '
                                      'border-radius: 4px; border-color: blue; font: bold ' + str(int(26 * ratio))
-                                     + 'px; min-width: 10em; padding: 6px; color: orange;')
+                                     + 'px; min-width: 10em; padding: 6px; color: white;')
                 if count < 10:
                     self.set_icon(button, count, ratio, progress_rus, progress_eng)
                 button.adjustSize()
