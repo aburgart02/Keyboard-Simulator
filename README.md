@@ -5,8 +5,11 @@ Keyboard-Simulator
 Управление:
 
 Up Arrow, Down Arrow, Left Arrow, Right Arrow - Переключение между элементами
+
 LButton или Enter - Выбор элемента
+
 Esc - Возврат к предыдущему окну
+
 F11 - Изменить режим окна приложения
 
 Необходимо установить:
