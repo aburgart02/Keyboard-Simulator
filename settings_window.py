@@ -14,14 +14,18 @@ class Settings(QWidget):
         self.background_file = r"backgrounds\background_0.jpg"
         self.background_text = QLabel("Background", self)
         self.volume_level_text = QLabel('Volume level: ' + str(settings.volume_level), self)
-        self.increase_volume_button = QPushButton(self)
-        self.increase_volume_button.clicked.connect(lambda x: self.change_volume(True))
         self.decrease_volume_button = QPushButton(self)
         self.decrease_volume_button.clicked.connect(lambda x: self.change_volume(False))
-        self.next_button = QPushButton(self)
-        self.next_button.clicked.connect(lambda x: self.set_background_file_name(True))
+        self.decrease_volume_button.setAutoDefault(True)
+        self.increase_volume_button = QPushButton(self)
+        self.increase_volume_button.clicked.connect(lambda x: self.change_volume(True))
+        self.increase_volume_button.setAutoDefault(True)
         self.previous_button = QPushButton(self)
         self.previous_button.clicked.connect(lambda x: self.set_background_file_name(False))
+        self.previous_button.setAutoDefault(True)
+        self.next_button = QPushButton(self)
+        self.next_button.clicked.connect(lambda x: self.set_background_file_name(True))
+        self.next_button.setAutoDefault(True)
         self.configure_elements(1)
 
     def keyPressEvent(self, e):

@@ -63,6 +63,7 @@ class Progress(QWidget):
                                                  + 'px; min-width: 10em; padding: 6px; color: white;')
         self.reset_progress_button.move(100 * ratio, 500 * ratio)
         self.reset_progress_button.clicked.connect(self.reset_progress)
+        self.reset_progress_button.setAutoDefault(True)
         self.reset_progress_button.adjustSize()
 
     def set_texts(self, reset_flag):

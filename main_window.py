@@ -65,9 +65,13 @@ class MainWindow(QWidget):
 
     def assign_buttons(self):
         self.start_button.clicked.connect(self.display_keyboard_layout_selection_window)
+        self.start_button.setAutoDefault(True)
         self.progress_button.clicked.connect(self.display_progress_window)
+        self.progress_button.setAutoDefault(True)
         self.settings_button.clicked.connect(self.display_settings_window)
+        self.settings_button.setAutoDefault(True)
         self.exit_button.clicked.connect(self.close_application)
+        self.exit_button.setAutoDefault(True)
 
     def configure_elements(self, ratio):
         self.start_button.setStyleSheet('background-color: #570290; border-style: outset; border-width: 2px; '
@@ -167,6 +171,7 @@ class MainWindow(QWidget):
 
     def display_main_window(self, mode):
         if mode:
+            self.start_button.setFocus()
             self.start_button.show()
             self.progress_button.show()
             self.settings_button.show()
@@ -187,29 +192,30 @@ class MainWindow(QWidget):
         self.change_widget_resolution(self.keyboard_layout_selection_widget, False)
         self.display_main_window(False)
         self.keyboard_layout_selection_widget.show()
-        self.keyboard_layout_selection_widget.setFocus()
+        self.keyboard_layout_selection_widget.first_text_button.setFocus()
 
     def display_settings_window(self):
         self.change_widget_resolution(self.settings_widget, False)
         self.display_main_window(False)
         self.settings_widget.show()
-        self.settings_widget.setFocus()
+        self.settings_widget.decrease_volume_button.setFocus()
 
     def display_progress_window(self):
         self.progress_widget = Progress(self)
         self.change_widget_resolution(self.progress_widget, False)
         self.display_main_window(False)
         self.progress_widget.show()
-        self.progress_widget.setFocus()
+        self.progress_widget.reset_progress_button.setFocus()
 
     def display_text_selection_window(self):
         self.change_widget_resolution(self.text_selection_widget, False)
         self.text_selection_widget.show()
         if self.keyboard_layout_selection_widget.keyboard_layout == 'rus':
             self.text_selection_widget.set_rus_texts()
+            self.text_selection_widget.rus_lesson_1.setFocus()
         else:
             self.text_selection_widget.set_eng_texts()
-        self.text_selection_widget.setFocus()
+            self.text_selection_widget.eng_lesson_1.setFocus()
 
     def close_application(self):
         self.close()

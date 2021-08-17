@@ -107,12 +107,18 @@ class TextSelection(QWidget):
     def assign_buttons(self):
         for k in range(len(self.rus_texts) - 2):
             self.rus_texts[k].clicked.connect(partial(self.set_text, r'texts\rus_texts\t' + str(k) + '.txt', k, 0))
+            self.rus_texts[k].setAutoDefault(True)
         for k in range(len(self.eng_texts) - 2):
             self.eng_texts[k].clicked.connect(partial(self.set_text, r'texts\eng_texts\t' + str(k) + '.txt', k, 1))
+            self.eng_texts[k].setAutoDefault(True)
         self.rus_my_text.clicked.connect(self.get_text_file)
+        self.rus_my_text.setAutoDefault(True)
         self.eng_my_text.clicked.connect(self.get_text_file)
+        self.eng_my_text.setAutoDefault(True)
         self.rus_random_text.clicked.connect(lambda x: self.create_text(r'texts\rus_texts\rus_words.txt', 0))
+        self.rus_random_text.setAutoDefault(True)
         self.eng_random_text.clicked.connect(lambda x: self.create_text(r'texts\eng_texts\eng_words.txt', 1))
+        self.eng_random_text.setAutoDefault(True)
 
     def change_resolution(self, ratio):
         self.setFixedSize(1280 * ratio, 720 * ratio)
