@@ -4,7 +4,7 @@ from PyQt5.QtGui import QImage, QPalette, QBrush
 from PyQt5.QtWidgets import QWidget, QPushButton
 from text_selection import TextSelection
 from keyboard_simulator import KeyboardSimulator
-from keyboard_layout_selection import KeyboardLayoutSelection
+from print_mode_selection import PrintModeSelection
 from progress_window import Progress
 from settings_window import Settings
 from settings import resolution_ratio
@@ -22,7 +22,7 @@ class MainWindow(QWidget):
         self.progress_button = QPushButton("Progress", self)
         self.settings_button = QPushButton("Settings", self)
         self.exit_button = QPushButton("Exit", self)
-        self.keyboard_layout_selection_widget = KeyboardLayoutSelection(self)
+        self.print_mode_selection_widget = PrintModeSelection(self)
         self.text_selection_widget = TextSelection(self)
         self.keyboard_simulator_widget = KeyboardSimulator(self)
         self.settings_widget = Settings(self)
@@ -43,7 +43,7 @@ class MainWindow(QWidget):
             self.change_main_window_resolution()
 
     def hide_windows(self):
-        self.keyboard_layout_selection_widget.hide()
+        self.print_mode_selection_widget.hide()
         self.keyboard_simulator_widget.hide()
         self.text_selection_widget.hide()
         self.progress_widget.hide()
@@ -64,7 +64,7 @@ class MainWindow(QWidget):
                 self.set_background(1)
 
     def assign_buttons(self):
-        self.start_button.clicked.connect(self.display_keyboard_layout_selection_window)
+        self.start_button.clicked.connect(self.display_print_mode_selection_window)
         self.start_button.setAutoDefault(True)
         self.progress_button.clicked.connect(self.display_progress_window)
         self.progress_button.setAutoDefault(True)
@@ -107,14 +107,14 @@ class MainWindow(QWidget):
         if self.text_selection_widget.previous_window:
             self.text_selection_widget.hide()
             self.text_selection_widget.previous_window = False
-            self.display_keyboard_layout_selection_window()
-        if self.keyboard_layout_selection_widget.next_window:
-            self.keyboard_layout_selection_widget.hide()
-            self.keyboard_layout_selection_widget.next_window = False
+            self.display_print_mode_selection_window()
+        if self.print_mode_selection_widget.next_window:
+            self.print_mode_selection_widget.hide()
+            self.print_mode_selection_widget.next_window = False
             self.display_text_selection_window()
-        if self.keyboard_layout_selection_widget.previous_window:
-            self.keyboard_layout_selection_widget.hide()
-            self.keyboard_layout_selection_widget.previous_window = False
+        if self.print_mode_selection_widget.previous_window:
+            self.print_mode_selection_widget.hide()
+            self.print_mode_selection_widget.previous_window = False
             self.display_main_window(True)
         if self.settings_widget.previous_window:
             self.settings_widget.hide()
@@ -130,10 +130,10 @@ class MainWindow(QWidget):
             self.change_widget_resolution(self.keyboard_simulator_widget, True)
             self.change_main_window_resolution()
             self.keyboard_simulator_widget.right_field.toggle_full_screen = False
-        if self.keyboard_layout_selection_widget.toggle_full_screen:
-            self.change_widget_resolution(self.keyboard_layout_selection_widget, True)
+        if self.print_mode_selection_widget.toggle_full_screen:
+            self.change_widget_resolution(self.print_mode_selection_widget, True)
             self.change_main_window_resolution()
-            self.keyboard_layout_selection_widget.toggle_full_screen = False
+            self.print_mode_selection_widget.toggle_full_screen = False
         if self.settings_widget.toggle_full_screen:
             self.change_widget_resolution(self.settings_widget, True)
             self.change_main_window_resolution()
@@ -188,11 +188,11 @@ class MainWindow(QWidget):
         self.keyboard_simulator_widget.show()
         self.keyboard_simulator_widget.right_field.setFocus()
 
-    def display_keyboard_layout_selection_window(self):
-        self.change_widget_resolution(self.keyboard_layout_selection_widget, False)
+    def display_print_mode_selection_window(self):
+        self.change_widget_resolution(self.print_mode_selection_widget, False)
         self.display_main_window(False)
-        self.keyboard_layout_selection_widget.show()
-        self.keyboard_layout_selection_widget.first_text_button.setFocus()
+        self.print_mode_selection_widget.show()
+        self.print_mode_selection_widget.first_text_button.setFocus()
 
     def display_settings_window(self):
         self.change_widget_resolution(self.settings_widget, False)
@@ -210,7 +210,7 @@ class MainWindow(QWidget):
     def display_text_selection_window(self):
         self.change_widget_resolution(self.text_selection_widget, False)
         self.text_selection_widget.show()
-        if self.keyboard_layout_selection_widget.keyboard_layout == 'rus':
+        if self.print_mode_selection_widget.keyboard_layout == 'rus':
             self.text_selection_widget.set_rus_texts()
             self.text_selection_widget.rus_lesson_1.setFocus()
         else:

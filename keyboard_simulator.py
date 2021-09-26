@@ -1,7 +1,7 @@
 import json
 import settings
 from PyQt5 import QtGui, QtCore
-from PyQt5.QtGui import QPixmap
+from PyQt5.QtGui import QPixmap, QFont
 from PyQt5.QtWidgets import QWidget, QLabel
 from input_field import RightField, LeftField
 from settings import resolution, codes
@@ -14,7 +14,7 @@ class KeyboardSimulator(QWidget):
         self.text_id = settings.text_id
         self.text_language = settings.text_language
         self.right_field = RightField(self, self.text)
-        self.left_field = LeftField(self)
+        self.left_field = LeftField(self, self.text)
         self.errors_counter = QLabel(self)
         self.timer = QLabel(self)
         self.progress_counter = QLabel(self)
@@ -35,17 +35,18 @@ class KeyboardSimulator(QWidget):
         self.timer.adjustSize()
         self.progress_counter.setText("Прогресс: " + str(round(100 * self.right_field.index / len(self.text), 1)) + "%")
         self.progress_counter.adjustSize()
-        self.speed_counter.setText("Знаков в минуту: " + str(round(60 * self.right_field.index
+        self.speed_counter.setText("Знаков в минуту: " + str(round(60 * self.right_field.right_letters_count
                                                                    / (self.right_field.time.second()
                                                                       + self.right_field.time.minute() * 60 + 0.1))))
         self.speed_counter.adjustSize()
         self.text_size.setText("Длина текста: " + str(len(self.text)))
         self.text_size.adjustSize()
         self.accuracy_counter.setText("Точность: "
-                                      + str(round(100 * self.right_field.index
-                                                  / (self.right_field.index + self.right_field.errors + 0.001))) + "%")
+                                      + str(round(100 * self.right_field.right_letters_count
+                                                  / (self.right_field.right_letters_count + self.right_field.errors + 0.001))) + "%")
         self.accuracy_counter.adjustSize()
-        self.left_field.update(self.right_field.typed_text)
+        self.left_field.update(self.right_field.word, self.right_field.words_in_text, self.right_field.letter_number,
+                               self.right_field.word_number)
         if len(self.right_field.type_text) == 0:
             self.finish_printing()
         if len(self.right_field.type_text) != 0 and self.right_field.next_symbol:
@@ -109,10 +110,10 @@ class KeyboardSimulator(QWidget):
         self.configure_elements(ratio)
         self.right_field.setGeometry(450 * ratio, 110 * ratio, 720 * ratio, 50 * ratio)
         self.left_field.setGeometry(60 * ratio, 110 * ratio, 390 * ratio, 50 * ratio)
-        self.right_field.setStyleSheet('background : #abcdef; font-weight: 500; color: black; font-size:'
-                                       + str(24 * ratio) + 'pt; ''border: 2px solid green; '
-                                                           'border-width : 2px 2px 2px 2px;')
-        self.left_field.setStyleSheet('background : #abcdef; font-weight: 500; color: grey; font-size:'
-                                      + str(24 * ratio) + 'pt; ''border: 2px solid green; '
-                                                          'border-width : 2px 0px 2px 2px;')
+        self.right_field.setStyleSheet('background : #abcdef; font-weight: 500; color: black; border: 2px solid green; '
+                                       'border-width : 2px 2px 2px 2px;')
+        self.right_field.setFont(QFont('Arial', 22 * ratio))
+        self.left_field.setStyleSheet('background : #abcdef; font-weight: 500; color: grey; border: 2px solid green; '
+                                      'border-width : 2px 0px 2px 2px;')
+        self.left_field.setFont(QFont('Arial', 22 * ratio))
         self.set_keyboard_picture()

@@ -6,6 +6,7 @@ text = 'text'
 text_language = 0
 text_id = None
 volume_level = 50
+print_mode = False
 app = QApplication(sys.argv)
 resolution = QDesktopWidget().availableGeometry()
 resolution_ratio = resolution.width() / 1280

@@ -143,10 +143,13 @@ class TextSelection(QWidget):
         self.next_window = True
 
     def get_text_file(self):
-        path = QFileDialog.getOpenFileName()[0]
-        with open(path, 'r') as f1:
-            settings.text = f1.read()
-        self.next_window = True
+        try:
+            path = QFileDialog.getOpenFileName()[0]
+            with open(path, 'r') as f1:
+                settings.text = f1.read()
+            self.next_window = True
+        except FileNotFoundError:
+            pass
 
     def set_text(self, path, text_id, text_language):
         with open(path, 'r') as f1:
