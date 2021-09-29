@@ -59,6 +59,7 @@ class RightField(QTextEdit):
             if not settings.print_mode:
                 if e.key() == 16777219 and len(self.word) != 0 and self.word_number != len(self.words_in_text) - 1:
                     self.type_text = self.words_in_text[self.word_number][self.letter_number - 1] + self.type_text
+                    self.next_symbol = True
                     self.letter_number -= 1
                     self.word = self.word[:len(self.word) - 1]
                     self.check_word_correctness()
@@ -76,7 +77,8 @@ class RightField(QTextEdit):
             self.highlight_word()
         else:
             self.setText(self.type_text)
-        self.index = sum([len(x) for x in self.words_in_text[:self.word_number]]) + self.letter_number + self.word_number
+        self.index = sum([len(x) for x in self.words_in_text[:self.word_number]]) + self.letter_number \
+                                                                                  + self.word_number
 
     def compose_word(self, e):
         if self.set_register(chr(e.key())) != self.type_text[0]:
@@ -84,6 +86,7 @@ class RightField(QTextEdit):
         else:
             self.right_letters_count += 1
         self.word += self.set_register(chr(e.key()))
+        self.next_symbol = True
         self.letter_number += 1
         if self.type_text[0] == ' ':
             self.word_number += 1

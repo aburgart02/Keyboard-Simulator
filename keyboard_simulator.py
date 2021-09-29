@@ -22,6 +22,7 @@ class KeyboardSimulator(QWidget):
         self.text_size = QLabel(self)
         self.accuracy_counter = QLabel(self)
         self.picture_slot = QLabel(self)
+        self.pixmap = None
         self.configure_elements(1)
         self.update_data()
         self.global_timer = QtCore.QTimer()
@@ -43,7 +44,8 @@ class KeyboardSimulator(QWidget):
         self.text_size.adjustSize()
         self.accuracy_counter.setText("Точность: "
                                       + str(round(100 * self.right_field.right_letters_count
-                                                  / (self.right_field.right_letters_count + self.right_field.errors + 0.001))) + "%")
+                                                  / (self.right_field.right_letters_count
+                                                     + self.right_field.errors + 0.001))) + "%")
         self.accuracy_counter.adjustSize()
         self.left_field.update(self.right_field.word, self.right_field.words_in_text, self.right_field.letter_number,
                                self.right_field.word_number)

@@ -50,7 +50,8 @@ class Settings(QWidget):
         self.increase_volume_button.setIcon(QIcon(r"materials\right_arrow.png"))
         self.increase_volume_button.setStyleSheet('background-color: rgb(0, 0, 0, 0)')
         self.increase_volume_button.setIconSize(QSize(60, 60))
-        self.increase_volume_button.move(self.volume_level_text.x() + self.volume_level_text.width() + 20, 200 * ratio - 6)
+        self.increase_volume_button.move(self.volume_level_text.x() + self.volume_level_text.width() + 20,
+                                         200 * ratio - 6)
         self.decrease_volume_button.setIcon(QIcon(r"materials\left_arrow.png"))
         self.decrease_volume_button.setStyleSheet('background-color: rgb(0, 0, 0, 0)')
         self.decrease_volume_button.setIconSize(QSize(60, 60))
