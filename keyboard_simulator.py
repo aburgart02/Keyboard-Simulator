@@ -1,5 +1,6 @@
 import json
 import settings
+import os.path
 from PyQt5 import QtGui, QtCore
 from PyQt5.QtGui import QPixmap, QFont
 from PyQt5.QtWidgets import QWidget, QLabel
@@ -58,7 +59,7 @@ class KeyboardSimulator(QWidget):
 
     def finish_printing(self):
         self.global_timer.stop()
-        with open(r'progress\progress.txt', 'r') as f:
+        with open(os.path.join('progress', 'progress.txt'), 'r') as f:
             data = f.readlines()
         progress_rus = json.loads(data[0])
         progress_eng = json.loads(data[1])
@@ -73,7 +74,7 @@ class KeyboardSimulator(QWidget):
             rus_max_speed = int(self.speed_counter.text().split()[3])
         if int(self.speed_counter.text().split()[3]) > eng_max_speed and self.text_language == 1:
             eng_max_speed = int(self.speed_counter.text().split()[3])
-        with open(r'progress\progress.txt', 'w') as f:
+        with open(os.path.join('progress', 'progress.txt'), 'w') as f:
             f.write(json.dumps(progress_rus))
             f.write('\n')
             f.write(json.dumps(progress_eng))
@@ -83,8 +84,9 @@ class KeyboardSimulator(QWidget):
             f.write(json.dumps(eng_max_speed))
 
     def set_keyboard_picture(self):
-        self.pixmap = QPixmap((r'keyboards\k'
-                               + str(codes[self.right_field.type_text.lower()[0]][self.text_language]) + '.png'))
+        self.pixmap = QPixmap((os.path.join('keyboards',
+                                            'k' + str(codes[self.right_field.type_text.lower()[0]][self.text_language])
+                                            + '.png')))
         if self.width() == 1280:
             self.picture_slot.setPixmap(self.pixmap.scaled(1280, self.pixmap.height()
                                                            // (self.pixmap.width() / 1280)))

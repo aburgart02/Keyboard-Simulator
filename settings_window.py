@@ -1,4 +1,5 @@
 import settings
+import os.path
 from PyQt5 import QtGui
 from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QIcon
@@ -11,7 +12,7 @@ class Settings(QWidget):
         self.previous_window = False
         self.toggle_full_screen = False
         self.background_file_index = 0
-        self.background_file = r"backgrounds\background_0.jpg"
+        self.background_file = os.path.join("backgrounds", "background_0.jpg")
         self.background_text = QLabel("Background", self)
         self.volume_level_text = QLabel('Volume level: ' + str(settings.volume_level), self)
         self.decrease_volume_button = QPushButton(self)
@@ -47,20 +48,20 @@ class Settings(QWidget):
                                            'padding: 6px; color: white;')
         self.background_text.adjustSize()
         self.background_text.move((self.width() - self.background_text.width()) // 2, 400 * ratio)
-        self.increase_volume_button.setIcon(QIcon(r"materials\right_arrow.png"))
+        self.increase_volume_button.setIcon(QIcon(os.path.join("materials", "right_arrow.png")))
         self.increase_volume_button.setStyleSheet('background-color: rgb(0, 0, 0, 0)')
         self.increase_volume_button.setIconSize(QSize(60, 60))
         self.increase_volume_button.move(self.volume_level_text.x() + self.volume_level_text.width() + 20,
                                          200 * ratio - 6)
-        self.decrease_volume_button.setIcon(QIcon(r"materials\left_arrow.png"))
+        self.decrease_volume_button.setIcon(QIcon(os.path.join("materials", "left_arrow.png")))
         self.decrease_volume_button.setStyleSheet('background-color: rgb(0, 0, 0, 0)')
         self.decrease_volume_button.setIconSize(QSize(60, 60))
         self.decrease_volume_button.move(self.volume_level_text.x() - 90, 200 * ratio - 6)
-        self.previous_button.setIcon(QIcon(r"materials\left_arrow.png"))
+        self.previous_button.setIcon(QIcon(os.path.join("materials", "left_arrow.png")))
         self.previous_button.setStyleSheet('background-color: rgb(0, 0, 0, 0)')
         self.previous_button.setIconSize(QSize(60, 60))
         self.previous_button.move(self.background_text.x() - 90, 400 * ratio - 6)
-        self.next_button.setIcon(QIcon(r"materials\right_arrow.png"))
+        self.next_button.setIcon(QIcon(os.path.join("materials", "right_arrow.png")))
         self.next_button.setStyleSheet('background-color: rgb(0, 0, 0, 0)')
         self.next_button.setIconSize(QSize(60, 60))
         self.next_button.move(self.background_text.x() + self.background_text.width() + 20, 400 * ratio - 6)
@@ -75,7 +76,7 @@ class Settings(QWidget):
         else:
             self.background_file_index -= 1
         self.background_file_index = self.background_file_index % 4
-        self.background_file = r"backgrounds\background_" + str(self.background_file_index) + ".jpg"
+        self.background_file = os.path.join("backgrounds", "background_" + str(self.background_file_index) + ".jpg")
 
     def change_volume(self, mode):
         if mode and settings.volume_level < 100:

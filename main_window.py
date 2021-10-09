@@ -1,3 +1,4 @@
+import os.path
 from PyQt5 import QtCore
 from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QImage, QPalette, QBrush
@@ -14,7 +15,7 @@ class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
         self.setFixedSize(1280, 720)
-        self.background_file = r"backgrounds\background_0.jpg"
+        self.background_file = os.path.join("backgrounds", "background_0.jpg")
         self.image = QImage(self.background_file)
         self.background = self.image.scaled(QSize(1280, 720))
         self.palette = QPalette()

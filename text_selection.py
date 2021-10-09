@@ -1,6 +1,7 @@
 import settings
 import random
 import json
+import os.path
 from PyQt5.QtWidgets import QWidget, QPushButton, QFileDialog
 from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QIcon
@@ -15,8 +16,8 @@ class TextSelection(QWidget):
         self.toggle_full_screen = False
         self.initialize_rus_texts()
         self.initialize_eng_texts()
-        self.mark_picture = QIcon(r'materials\mark.png')
-        self.cross_picture = QIcon(r'materials\cross.png')
+        self.mark_picture = QIcon(os.path.join('materials', 'mark.png'))
+        self.cross_picture = QIcon(os.path.join('materials', 'cross.png'))
         self.assign_buttons()
         self.configure_elements(1)
 
@@ -69,7 +70,7 @@ class TextSelection(QWidget):
                           self.eng_text_3, self.eng_random_text, self.eng_my_text]
 
     def configure_elements(self, ratio):
-        with open(r'progress\progress.txt', 'r') as f:
+        with open(os.path.join('progress', 'progress.txt'), 'r') as f:
             data = f.readlines()
         progress_rus = json.loads(data[0])
         progress_eng = json.loads(data[1])
@@ -106,18 +107,22 @@ class TextSelection(QWidget):
 
     def assign_buttons(self):
         for k in range(len(self.rus_texts) - 2):
-            self.rus_texts[k].clicked.connect(partial(self.set_text, r'texts\rus_texts\t' + str(k) + '.txt', k, 0))
+            self.rus_texts[k].clicked.connect(partial(self.set_text, os.path.join('texts', 'rus_texts',
+                                                                                  't' + str(k) + '.txt'), k, 0))
             self.rus_texts[k].setAutoDefault(True)
         for k in range(len(self.eng_texts) - 2):
-            self.eng_texts[k].clicked.connect(partial(self.set_text, r'texts\eng_texts\t' + str(k) + '.txt', k, 1))
+            self.eng_texts[k].clicked.connect(partial(self.set_text, os.path.join('texts', 'eng_texts',
+                                                                                  't' + str(k) + '.txt'), k, 1))
             self.eng_texts[k].setAutoDefault(True)
         self.rus_my_text.clicked.connect(self.get_text_file)
         self.rus_my_text.setAutoDefault(True)
         self.eng_my_text.clicked.connect(self.get_text_file)
         self.eng_my_text.setAutoDefault(True)
-        self.rus_random_text.clicked.connect(lambda x: self.create_text(r'texts\rus_texts\rus_words.txt', 0))
+        self.rus_random_text.clicked.connect(lambda x: self.create_text(os.path.join('texts',
+                                                                                     'rus_texts', 'rus_words.txt'), 0))
         self.rus_random_text.setAutoDefault(True)
-        self.eng_random_text.clicked.connect(lambda x: self.create_text(r'texts\eng_texts\eng_words.txt', 1))
+        self.eng_random_text.clicked.connect(lambda x: self.create_text(os.path.join('texts', 'eng_texts',
+                                                                                     'eng_words.txt'), 1))
         self.eng_random_text.setAutoDefault(True)
 
     def change_resolution(self, ratio):

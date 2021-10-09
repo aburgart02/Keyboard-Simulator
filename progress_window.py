@@ -1,4 +1,5 @@
 import json
+import os.path
 from PyQt5.QtWidgets import QWidget, QLabel, QPushButton
 
 
@@ -25,7 +26,7 @@ class Progress(QWidget):
             self.toggle_full_screen = True
 
     def get_progress_data(self):
-        with open(r'progress\progress.txt', 'r') as f:
+        with open(os.path.join('progress', 'progress.txt'), 'r') as f:
             data = f.readlines()
         rus_progress = json.loads(data[0])
         for x in rus_progress:
@@ -82,7 +83,7 @@ class Progress(QWidget):
                                         + str(self.eng_max_speed * reset_flag) + ' characters per minute')
 
     def reset_progress(self):
-        with open(r'progress\progress.txt', 'w') as f:
+        with open(os.path.join('progress', 'progress.txt'), 'w') as f:
             f.write(json.dumps([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]))
             f.write('\n')
             f.write(json.dumps([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]))
