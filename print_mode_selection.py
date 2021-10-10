@@ -1,5 +1,6 @@
-import settings
 import os.path
+import settings
+from settings import keys
 from PyQt5 import QtGui
 from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QIcon
@@ -23,9 +24,9 @@ class PrintModeSelection(QWidget):
         self.configure_elements(1)
 
     def keyPressEvent(self, e):
-        if e.key() == 16777216:
+        if e.key() == keys['ESC_KEY']:
             self.previous_window = True
-        if e.key() == 16777274:
+        if e.key() == keys['F11_KEY']:
             self.toggle_full_screen = True
 
     def configure_elements(self, ratio):

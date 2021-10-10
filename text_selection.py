@@ -1,7 +1,8 @@
-import settings
 import random
 import json
 import os.path
+import settings
+from settings import keys
 from PyQt5.QtWidgets import QWidget, QPushButton, QFileDialog
 from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QIcon
@@ -22,9 +23,9 @@ class TextSelection(QWidget):
         self.configure_elements(1)
 
     def keyPressEvent(self, e):
-        if e.key() == 16777216:
+        if e.key() == keys['ESC_KEY']:
             self.previous_window = True
-        if e.key() == 16777274:
+        if e.key() == keys['F11_KEY']:
             self.toggle_full_screen = True
 
     def initialize_rus_texts(self):

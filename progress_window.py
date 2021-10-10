@@ -1,6 +1,7 @@
 import json
 import os.path
 from PyQt5.QtWidgets import QWidget, QLabel, QPushButton
+from settings import keys
 
 
 class Progress(QWidget):
@@ -20,9 +21,9 @@ class Progress(QWidget):
         self.get_progress_data()
 
     def keyPressEvent(self, e):
-        if e.key() == 16777216:
+        if e.key() == keys['ESC_KEY']:
             self.previous_window = True
-        if e.key() == 16777274:
+        if e.key() == keys['F11_KEY']:
             self.toggle_full_screen = True
 
     def get_progress_data(self):

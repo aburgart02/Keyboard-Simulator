@@ -8,7 +8,7 @@ from keyboard_simulator import KeyboardSimulator
 from print_mode_selection import PrintModeSelection
 from progress_window import Progress
 from settings_window import Settings
-from settings import resolution_ratio
+from settings import resolution_ratio, keys
 
 
 class MainWindow(QWidget):
@@ -40,7 +40,7 @@ class MainWindow(QWidget):
         self.show()
 
     def keyPressEvent(self, e):
-        if e.key() == 16777274:
+        if e.key() == keys['F11_KEY']:
             self.change_main_window_resolution()
 
     def hide_windows(self):

@@ -6,6 +6,7 @@ from PyQt5.QtCore import QUrl
 from PyQt5.QtGui import QTextCursor, QTextCharFormat, QColor
 from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent
 from PyQt5.QtWidgets import QTextEdit
+from settings import keys
 
 
 class RightField(QTextEdit):
@@ -48,17 +49,18 @@ class RightField(QTextEdit):
             self.timer.timeout.connect(self.tick)
             self.timer_flag = True
         try:
-            if e.key() == 16777216:
+            if e.key() == keys['ESC_KEY']:
                 self.previous_window = True
-            if e.key() == 16777274:
+            if e.key() == keys['F11_KEY']:
                 self.toggle_full_screen = True
-            if e.key() == 16777248:
+            if e.key() == keys['SHIFT_KEY']:
                 self.is_uppercase = True
             if settings.print_mode:
                 self.compose_word(e)
                 self.check_word_correctness()
             if not settings.print_mode:
-                if e.key() == 16777219 and len(self.word) != 0 and self.word_number != len(self.words_in_text) - 1:
+                if e.key() == keys['BACKSPACE_KEY'] and len(self.word) != 0 \
+                        and self.word_number != len(self.words_in_text) - 1:
                     self.type_text = self.words_in_text[self.word_number][self.letter_number - 1] + self.type_text
                     self.next_symbol = True
                     self.letter_number -= 1
@@ -108,7 +110,7 @@ class RightField(QTextEdit):
             return c.lower()
 
     def keyReleaseEvent(self, e):
-        if e.key() == 16777248:
+        if e.key() == keys['SHIFT_KEY']:
             self.is_uppercase = False
 
     def tick(self):
