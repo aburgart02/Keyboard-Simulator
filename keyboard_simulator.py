@@ -23,6 +23,8 @@ class KeyboardSimulator(QWidget):
         self.text_size = QLabel(self)
         self.accuracy_counter = QLabel(self)
         self.picture_slot = QLabel(self)
+        self.toggle_full_screen = False
+        self.previous_window = False
         self.pixmap = None
         self.configure_elements(1)
         self.update_data()

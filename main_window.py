@@ -28,6 +28,13 @@ class MainWindow(QWidget):
         self.keyboard_simulator_widget = KeyboardSimulator(self)
         self.settings_widget = Settings(self)
         self.progress_widget = Progress(self)
+        self.widgets_list = [(self.print_mode_selection_widget, self.display_main_window,
+                              self.display_text_selection_window),
+                             (self.text_selection_widget, self.display_print_mode_selection_window,
+                              self.display_keyboard_simulator_window),
+                             (self.settings_widget, self.display_main_window),
+                             (self.keyboard_simulator_widget, self.display_text_selection_window),
+                             (self.progress_widget, self.display_main_window)]
         self.hide_windows()
         self.set_background(1)
         self.configure_elements(1)
@@ -97,56 +104,23 @@ class MainWindow(QWidget):
         self.exit_button.move((self.width() - self.exit_button.width()) // 2, 420 * ratio)
 
     def switch_windows(self):
-        if self.keyboard_simulator_widget.right_field.previous_window:
-            self.keyboard_simulator_widget.close()
-            self.keyboard_simulator_widget.right_field.previous_window = False
-            self.display_text_selection_window()
-        if self.text_selection_widget.next_window:
-            self.text_selection_widget.hide()
-            self.text_selection_widget.next_window = False
-            self.display_keyboard_simulator_window()
-        if self.text_selection_widget.previous_window:
-            self.text_selection_widget.hide()
-            self.text_selection_widget.previous_window = False
-            self.display_print_mode_selection_window()
-        if self.print_mode_selection_widget.next_window:
-            self.print_mode_selection_widget.hide()
-            self.print_mode_selection_widget.next_window = False
-            self.display_text_selection_window()
-        if self.print_mode_selection_widget.previous_window:
-            self.print_mode_selection_widget.hide()
-            self.print_mode_selection_widget.previous_window = False
-            self.display_main_window(True)
-        if self.settings_widget.previous_window:
-            self.settings_widget.hide()
-            self.settings_widget.previous_window = False
-            self.display_main_window(True)
-        if self.progress_widget.previous_window:
-            self.progress_widget.hide()
-            self.progress_widget.previous_window = False
-            self.display_main_window(True)
+        for widget in self.widgets_list:
+            if widget[0].previous_window:
+                widget[0].close()
+                widget[0].previous_window = False
+                widget[1]()
+        for widget in self.widgets_list[:2]:
+            if widget[0].next_window:
+                widget[0].hide()
+                widget[0].next_window = False
+                widget[2]()
 
     def check_windows_resolution(self):
-        if self.keyboard_simulator_widget.right_field.toggle_full_screen:
-            self.change_widget_resolution(self.keyboard_simulator_widget, True)
-            self.change_main_window_resolution()
-            self.keyboard_simulator_widget.right_field.toggle_full_screen = False
-        if self.print_mode_selection_widget.toggle_full_screen:
-            self.change_widget_resolution(self.print_mode_selection_widget, True)
-            self.change_main_window_resolution()
-            self.print_mode_selection_widget.toggle_full_screen = False
-        if self.settings_widget.toggle_full_screen:
-            self.change_widget_resolution(self.settings_widget, True)
-            self.change_main_window_resolution()
-            self.settings_widget.toggle_full_screen = False
-        if self.progress_widget.toggle_full_screen:
-            self.change_widget_resolution(self.progress_widget, True)
-            self.change_main_window_resolution()
-            self.progress_widget.toggle_full_screen = False
-        if self.text_selection_widget.toggle_full_screen:
-            self.change_widget_resolution(self.text_selection_widget, True)
-            self.change_main_window_resolution()
-            self.text_selection_widget.toggle_full_screen = False
+        for widget in self.widgets_list:
+            if widget[0].toggle_full_screen:
+                self.change_widget_resolution(widget[0], True)
+                self.change_main_window_resolution()
+                widget[0].toggle_full_screen = False
 
     def change_main_window_resolution(self):
         if self.isFullScreen():
@@ -170,41 +144,43 @@ class MainWindow(QWidget):
             else:
                 widget.change_resolution(1)
 
-    def display_main_window(self, mode):
-        if mode:
-            self.start_button.setFocus()
-            self.start_button.show()
-            self.progress_button.show()
-            self.settings_button.show()
-            self.exit_button.show()
-        else:
-            self.start_button.hide()
-            self.progress_button.hide()
-            self.settings_button.hide()
-            self.exit_button.hide()
+    def display_main_window(self):
+        self.start_button.setFocus()
+        self.start_button.show()
+        self.progress_button.show()
+        self.settings_button.show()
+        self.exit_button.show()
+
+    def hide_main_window(self):
+        self.start_button.hide()
+        self.progress_button.hide()
+        self.settings_button.hide()
+        self.exit_button.hide()
 
     def display_keyboard_simulator_window(self):
         self.keyboard_simulator_widget = KeyboardSimulator(self)
+        self.widgets_list[3] = (self.keyboard_simulator_widget, self.display_text_selection_window)
         self.change_widget_resolution(self.keyboard_simulator_widget, False)
         self.keyboard_simulator_widget.show()
         self.keyboard_simulator_widget.right_field.setFocus()
 
     def display_print_mode_selection_window(self):
         self.change_widget_resolution(self.print_mode_selection_widget, False)
-        self.display_main_window(False)
+        self.hide_main_window()
         self.print_mode_selection_widget.show()
         self.print_mode_selection_widget.first_text_button.setFocus()
 
     def display_settings_window(self):
         self.change_widget_resolution(self.settings_widget, False)
-        self.display_main_window(False)
+        self.hide_main_window()
         self.settings_widget.show()
         self.settings_widget.decrease_volume_button.setFocus()
 
     def display_progress_window(self):
         self.progress_widget = Progress(self)
+        self.widgets_list[4] = (self.progress_widget, self.display_main_window)
         self.change_widget_resolution(self.progress_widget, False)
-        self.display_main_window(False)
+        self.hide_main_window()
         self.progress_widget.show()
         self.progress_widget.reset_progress_button.setFocus()
 

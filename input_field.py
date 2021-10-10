@@ -12,6 +12,7 @@ from settings import keys
 class RightField(QTextEdit):
     def __init__(self, window, text):
         super().__init__(window)
+        self.keyboard_simulator = window
         self.setGeometry(450, 110, 720, 50)
         self.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
@@ -19,8 +20,8 @@ class RightField(QTextEdit):
         self.format = QTextCharFormat()
         self.format.setUnderlineStyle(QTextCharFormat.SingleUnderline)
         self.format.setUnderlineColor(QColor(255, 0, 0))
-        self.type_text = text
-        self.typed_text = ''
+        self.text = text
+        self.type_text = text if settings.print_mode else text + ' '
         self.word = ''
         self.words_in_text = text.split()
         self.word_number = 0
@@ -28,8 +29,6 @@ class RightField(QTextEdit):
         self.right_letters_count = 0
         self.index = 0
         self.errors = 0
-        self.toggle_full_screen = False
-        self.previous_window = False
         self.is_uppercase = False
         self.next_symbol = False
         self.setText(self.type_text)
@@ -50,17 +49,16 @@ class RightField(QTextEdit):
             self.timer_flag = True
         try:
             if e.key() == keys['ESC_KEY']:
-                self.previous_window = True
+                self.keyboard_simulator.previous_window = True
             if e.key() == keys['F11_KEY']:
-                self.toggle_full_screen = True
+                self.keyboard_simulator.toggle_full_screen = True
             if e.key() == keys['SHIFT_KEY']:
                 self.is_uppercase = True
             if settings.print_mode:
                 self.compose_word(e)
                 self.check_word_correctness()
             if not settings.print_mode:
-                if e.key() == keys['BACKSPACE_KEY'] and len(self.word) != 0 \
-                        and self.word_number != len(self.words_in_text) - 1:
+                if e.key() == keys['BACKSPACE_KEY'] and len(self.word) != 0 and len(self.type_text) != 0:
                     self.type_text = self.words_in_text[self.word_number][self.letter_number - 1] + self.type_text
                     self.next_symbol = True
                     self.letter_number -= 1
@@ -80,22 +78,25 @@ class RightField(QTextEdit):
             self.highlight_word()
         else:
             self.setText(self.type_text)
-        self.index = sum([len(x) for x in self.words_in_text[:self.word_number]]) + self.letter_number \
-                                                                                  + self.word_number
+        self.index = len(self.text) - len(self.type_text)
 
     def compose_word(self, e):
         if self.set_register(chr(e.key())) != self.type_text[0]:
             self.errors += 1
         else:
             self.right_letters_count += 1
-        self.word += self.set_register(chr(e.key()))
-        self.next_symbol = True
-        self.letter_number += 1
-        if self.type_text[0] == ' ':
-            self.word_number += 1
-            self.letter_number = 0
-            self.word = ''
-        self.type_text = self.type_text[1:]
+        if self.type_text[0] == ' ' and chr(e.key()) != ' ' and not settings.print_mode:
+            self.media_player.play()
+        else:
+            self.word += self.set_register(chr(e.key()))
+            self.next_symbol = True
+            self.letter_number += 1
+            if self.type_text[0] == ' ' and chr(e.key()) == ' ' or self.type_text[0] == ' ' and settings.print_mode:
+                if len(self.type_text) > 1:
+                    self.word_number += 1
+                self.letter_number = 0
+                self.word = ''
+            self.type_text = self.type_text[1:]
 
     def highlight_word(self):
         self.setText(self.type_text)
