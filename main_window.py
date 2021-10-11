@@ -58,7 +58,7 @@ class MainWindow(QWidget):
         self.settings_widget.hide()
 
     def set_background(self, ratio):
-        self.background = self.image.scaled(QSize(1280 * ratio, 720 * ratio))
+        self.background = self.image.scaled(QSize(int(1280 * ratio), int(720 * ratio)))
         self.palette.setBrush(QPalette.Window, QBrush(self.background))
         self.setPalette(self.palette)
 
@@ -86,22 +86,22 @@ class MainWindow(QWidget):
                                         'border-radius: 10px; border-color: yellow; font: bold ' +
                                         str(int(28 * ratio)) + 'px; min-width: 10em; padding: 6px; color: white;')
         self.start_button.adjustSize()
-        self.start_button.move((self.width() - self.start_button.width()) // 2, 120 * ratio)
+        self.start_button.move((self.width() - self.start_button.width()) // 2, int(120 * ratio))
         self.progress_button.setStyleSheet('background-color: #570290; border-style: outset; border-width: 2px; '
                                            'border-radius: 10px; border-color: yellow; font: bold '
                                            + str(int(28 * ratio)) + 'px; min-width: 10em; padding: 6px; color: white;')
         self.progress_button.adjustSize()
-        self.progress_button.move((self.width() - self.progress_button.width()) // 2, 220 * ratio)
+        self.progress_button.move((self.width() - self.progress_button.width()) // 2, int(220 * ratio))
         self.settings_button.setStyleSheet('background-color: #570290; border-style: outset; border-width: 2px; '
                                            'border-radius: 10px; border-color: yellow; font: bold '
                                            + str(int(28 * ratio)) + 'px; min-width: 10em; padding: 6px; color: white;')
         self.settings_button.adjustSize()
-        self.settings_button.move((self.width() - self.settings_button.width()) // 2, 320 * ratio)
+        self.settings_button.move((self.width() - self.settings_button.width()) // 2, int(320 * ratio))
         self.exit_button.setStyleSheet('background-color: #570290; border-style: outset; border-width: 2px; '
                                        'border-radius: 10px; border-color: yellow; font: bold '
                                        + str(int(28 * ratio)) + 'px; min-width: 10em; padding: 6px; color: white;')
         self.exit_button.adjustSize()
-        self.exit_button.move((self.width() - self.exit_button.width()) // 2, 420 * ratio)
+        self.exit_button.move((self.width() - self.exit_button.width()) // 2, int(420 * ratio))
 
     def switch_windows(self):
         for widget in self.widgets_list:

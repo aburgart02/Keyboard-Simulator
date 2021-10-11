@@ -47,7 +47,7 @@ class PrintModeSelection(QWidget):
         self.second_text_button.setIconSize(QSize(1024, 272))
         self.second_text_button.clicked.connect(lambda x: self.select_keyboard_layout('eng'))
         self.second_text_button.setAutoDefault(True)
-        self.mode.move((self.width() - self.text.width()) // 1.5, 42 * ratio)
+        self.mode.move(int((self.width() - self.text.width()) // 1.5), 42 * ratio)
         self.mode.setStyleSheet('background-color: #570290; border-style: outset; border-width: 2px; '
                                 'border-radius: 10px; border-color: yellow; font: bold '
                                 + str(int(28 * ratio)) + 'px; min-width: 10em; padding: 6px; color: white;')
