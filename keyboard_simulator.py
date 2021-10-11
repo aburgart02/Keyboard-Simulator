@@ -15,7 +15,7 @@ class KeyboardSimulator(QWidget):
         self.text_id = settings.text_id
         self.text_language = settings.text_language
         self.right_field = RightField(self, self.text)
-        self.left_field = LeftField(self, self.text)
+        self.left_field = LeftField(self)
         self.statistics_recorder = None
         self.errors_counter = QLabel(self)
         self.timer = QLabel(self)

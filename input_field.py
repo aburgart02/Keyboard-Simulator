@@ -119,10 +119,9 @@ class RightField(QTextEdit):
 
 
 class LeftField(QTextEdit):
-    def __init__(self, window, text):
+    def __init__(self, window):
         super().__init__(window)
         self.setGeometry(60, 110, 390, 50)
-        self.original_text = text
         self.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.setWordWrapMode(QtGui.QTextOption.NoWrap)
