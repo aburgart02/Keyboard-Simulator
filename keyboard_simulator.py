@@ -1,4 +1,3 @@
-import json
 import settings
 import os.path
 from PyQt5 import QtGui, QtCore
@@ -6,6 +5,7 @@ from PyQt5.QtGui import QPixmap, QFont
 from PyQt5.QtWidgets import QWidget, QLabel
 from input_field import RightField, LeftField
 from settings import resolution, codes
+from statistics_recorder import StatisticsRecorder
 
 
 class KeyboardSimulator(QWidget):
@@ -16,6 +16,7 @@ class KeyboardSimulator(QWidget):
         self.text_language = settings.text_language
         self.right_field = RightField(self, self.text)
         self.left_field = LeftField(self, self.text)
+        self.statistics_recorder = None
         self.errors_counter = QLabel(self)
         self.timer = QLabel(self)
         self.progress_counter = QLabel(self)
@@ -61,29 +62,8 @@ class KeyboardSimulator(QWidget):
 
     def finish_printing(self):
         self.global_timer.stop()
-        with open(os.path.join('progress', 'progress.txt'), 'r') as f:
-            data = f.readlines()
-        progress_rus = json.loads(data[0])
-        progress_eng = json.loads(data[1])
-        rus_max_speed = json.loads(data[2])
-        eng_max_speed = json.loads(data[3])
-        if self.text_id is not None and self.text_id < 10:
-            if self.text_language == 0:
-                progress_rus[self.text_id] = 1
-            else:
-                progress_eng[self.text_id] = 1
-        if int(self.speed_counter.text().split()[3]) > rus_max_speed and self.text_language == 0:
-            rus_max_speed = int(self.speed_counter.text().split()[3])
-        if int(self.speed_counter.text().split()[3]) > eng_max_speed and self.text_language == 1:
-            eng_max_speed = int(self.speed_counter.text().split()[3])
-        with open(os.path.join('progress', 'progress.txt'), 'w') as f:
-            f.write(json.dumps(progress_rus))
-            f.write('\n')
-            f.write(json.dumps(progress_eng))
-            f.write('\n')
-            f.write(json.dumps(rus_max_speed))
-            f.write('\n')
-            f.write(json.dumps(eng_max_speed))
+        self.statistics_recorder = StatisticsRecorder(self.text_id, self.text_language, self.speed_counter)
+        self.statistics_recorder.record_statistics()
 
     def set_keyboard_picture(self):
         self.pixmap = QPixmap((os.path.join('keyboards',
