@@ -29,12 +29,8 @@ class Progress(QWidget):
     def get_progress_data(self):
         with open(os.path.join('progress', 'progress.txt'), 'r') as f:
             data = f.readlines()
-        rus_progress = json.loads(data[0])
-        for x in rus_progress:
-            self.rus_progress += x
-        eng_progress = json.loads(data[1])
-        for x in eng_progress:
-            self.eng_progress += x
+        self.rus_progress = sum(json.loads(data[0]))
+        self.eng_progress = sum(json.loads(data[1]))
         self.rus_max_speed = json.loads(data[2])
         self.eng_max_speed = json.loads(data[3])
 
