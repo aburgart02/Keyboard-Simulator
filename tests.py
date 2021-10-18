@@ -1,5 +1,10 @@
+import sys
+import os.path
+import settings
+import json
 from PyQt5 import QtGui
 from PyQt5.QtCore import QEvent, Qt
+from PyQt5.QtWidgets import QApplication
 from main_window import MainWindow
 from keyboard_simulator import KeyboardSimulator
 from settings_window import Settings
@@ -7,11 +12,9 @@ from print_mode_selection import PrintModeSelection
 from progress_window import Progress
 from text_selection import TextSelection
 from input_field import RightField
-import os.path
-import settings
-import json
 
 
+app = QApplication(sys.argv)
 main_window = MainWindow()
 keyboard_simulator_window = KeyboardSimulator(main_window)
 settings_window = Settings(main_window)
@@ -27,11 +30,9 @@ class TestMainWindow:
     def test_background_loading(self):
         assert type(main_window.background) is QtGui.QImage
 
-    def test_toggle_full_screen_on(self):
+    def test_toggle_full_screen_on_off(self):
         main_window.change_main_window_resolution()
         assert main_window.isFullScreen()
-
-    def test_toggle_full_screen_off(self):
         main_window.change_main_window_resolution()
         assert not main_window.isFullScreen()
 

@@ -4,13 +4,14 @@ from PyQt5 import QtGui, QtCore
 from PyQt5.QtGui import QPixmap, QFont
 from PyQt5.QtWidgets import QWidget, QLabel
 from input_field import RightField, LeftField
-from settings import resolution, codes
+from settings import codes
 from statistics_recorder import StatisticsRecorder
 
 
 class KeyboardSimulator(QWidget):
     def __init__(self, main):
         super().__init__(main)
+        self.resolution = main.resolution
         self.text = settings.text
         self.text_id = settings.text_id
         self.text_language = settings.text_language
@@ -72,9 +73,9 @@ class KeyboardSimulator(QWidget):
         if self.width() == 1280:
             self.picture_slot.setPixmap(self.pixmap.scaled(1280, self.pixmap.height()
                                                            // (self.pixmap.width() / 1280)))
-        if self.width() == resolution.width():
-            self.picture_slot.setPixmap(self.pixmap.scaled(resolution.width(), self.pixmap.height()
-                                                           // (self.pixmap.width() / resolution.width())))
+        if self.width() == self.resolution.width():
+            self.picture_slot.setPixmap(self.pixmap.scaled(self.resolution.width(), self.pixmap.height()
+                                                           // (self.pixmap.width() / self.resolution.width())))
 
     def configure_elements(self, ratio):
         self.errors_counter.move(60 * ratio, 30 * ratio)
@@ -98,8 +99,8 @@ class KeyboardSimulator(QWidget):
         self.left_field.setGeometry(60 * ratio, 110 * ratio, 390 * ratio, 50 * ratio)
         self.right_field.setStyleSheet('background : #abcdef; font-weight: 500; color: black; border: 2px solid green; '
                                        'border-width : 2px 2px 2px 2px;')
-        self.right_field.setFont(QFont('Arial', 22 * ratio))
+        self.right_field.setFont(QFont('Arial', 24 * ratio))
         self.left_field.setStyleSheet('background : #abcdef; font-weight: 500; color: grey; border: 2px solid green; '
                                       'border-width : 2px 0px 2px 2px;')
-        self.left_field.setFont(QFont('Arial', 22 * ratio))
+        self.left_field.setFont(QFont('Arial', 24 * ratio))
         self.set_keyboard_picture()

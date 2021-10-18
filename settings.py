@@ -1,15 +1,8 @@
-import sys
-from PyQt5.QtWidgets import QDesktopWidget, QApplication
-
-
 text = 'text'
 text_language = 0
 text_id = None
 volume_level = 50
 print_mode = False
-app = QApplication(sys.argv)
-resolution = QDesktopWidget().availableGeometry()
-resolution_ratio = resolution.width() / 1280
 keys = {'ESC_KEY': 16777216, 'F11_KEY': 16777274, 'SHIFT_KEY': 16777248, 'BACKSPACE_KEY': 16777219}
 codes = {'~': [1, 1], '`': [1, 1], 'ё': [1, 1], '1': [2, 2], '!': [2, 2], '2': [3, 3], '@': [3, 3], '"': [3, 36],
          '3': [4, 4], '#': [4, 4], '№': [4, 4], '$': [5, 5], '4': [5, 5], ';': [5, 35], '5': [6, 6], '%': [6, 6],

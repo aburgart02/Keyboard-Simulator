@@ -2,19 +2,21 @@ import os.path
 from PyQt5 import QtCore
 from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QImage, QPalette, QBrush
-from PyQt5.QtWidgets import QWidget, QPushButton
+from PyQt5.QtWidgets import QWidget, QPushButton, QDesktopWidget
 from text_selection import TextSelection
 from keyboard_simulator import KeyboardSimulator
 from print_mode_selection import PrintModeSelection
 from progress_window import Progress
 from settings_window import Settings
-from settings import resolution_ratio, keys
+from settings import keys
 
 
 class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
         self.setFixedSize(1280, 720)
+        self.resolution = QDesktopWidget().availableGeometry()
+        self.resolution_ratio = self.resolution.width() / 1280
         self.background_file = os.path.join("backgrounds", "background_0.jpg")
         self.image = QImage(self.background_file)
         self.background = self.image.scaled(QSize(1280, 720))
@@ -67,7 +69,7 @@ class MainWindow(QWidget):
             self.background_file = self.settings_widget.background_file
             self.image = QImage(self.background_file)
             if self.isFullScreen():
-                self.set_background(resolution_ratio)
+                self.set_background(self.resolution_ratio)
             else:
                 self.set_background(1)
 
@@ -129,18 +131,18 @@ class MainWindow(QWidget):
             self.configure_elements(1)
         else:
             self.showFullScreen()
-            self.set_background(resolution_ratio)
-            self.configure_elements(resolution_ratio)
+            self.set_background(self.resolution_ratio)
+            self.configure_elements(self.resolution_ratio)
 
     def change_widget_resolution(self, widget, mode):
         if mode:
             if self.isFullScreen():
                 widget.change_resolution(1)
             else:
-                widget.change_resolution(resolution_ratio)
+                widget.change_resolution(self.resolution_ratio)
         else:
             if self.isFullScreen():
-                widget.change_resolution(resolution_ratio)
+                widget.change_resolution(self.resolution_ratio)
             else:
                 widget.change_resolution(1)
 
