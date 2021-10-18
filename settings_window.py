@@ -5,6 +5,7 @@ from PyQt5 import QtGui
 from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QWidget, QLabel, QPushButton
+import styles
 
 
 class Settings(QWidget):
@@ -38,32 +39,28 @@ class Settings(QWidget):
 
     def configure_elements(self, ratio):
         self.volume_level_text.setFont(QtGui.QFont("Arial", 20, QtGui.QFont.Bold))
-        self.volume_level_text.setStyleSheet('background-color: #570290; border-style: outset; border-width: 2px; '
-                                             'border-radius: 4px; border-color: blue; min-width: 10em;'
-                                             'padding: 6px; color: white;')
+        self.volume_level_text.setStyleSheet(styles.settings_text_style)
         self.volume_level_text.adjustSize()
         self.volume_level_text.move((self.width() - self.volume_level_text.width()) // 2, 200 * ratio)
         self.background_text.setFont(QtGui.QFont("Arial", 20, QtGui.QFont.Bold))
-        self.background_text.setStyleSheet('background-color: #570290; border-style: outset; border-width: 2px; '
-                                           'border-radius: 4px; border-color: blue; min-width: 10em;'
-                                           'padding: 6px; color: white;')
+        self.background_text.setStyleSheet(styles.settings_text_style)
         self.background_text.adjustSize()
         self.background_text.move((self.width() - self.background_text.width()) // 2, 400 * ratio)
         self.increase_volume_button.setIcon(QIcon(os.path.join("materials", "right_arrow.png")))
-        self.increase_volume_button.setStyleSheet('background-color: rgb(0, 0, 0, 0)')
+        self.increase_volume_button.setStyleSheet(styles.settings_button_style)
         self.increase_volume_button.setIconSize(QSize(60, 60))
         self.increase_volume_button.move(self.volume_level_text.x() + self.volume_level_text.width() + 20,
                                          200 * ratio - 6)
         self.decrease_volume_button.setIcon(QIcon(os.path.join("materials", "left_arrow.png")))
-        self.decrease_volume_button.setStyleSheet('background-color: rgb(0, 0, 0, 0)')
+        self.decrease_volume_button.setStyleSheet(styles.settings_button_style)
         self.decrease_volume_button.setIconSize(QSize(60, 60))
         self.decrease_volume_button.move(self.volume_level_text.x() - 90, 200 * ratio - 6)
         self.previous_button.setIcon(QIcon(os.path.join("materials", "left_arrow.png")))
-        self.previous_button.setStyleSheet('background-color: rgb(0, 0, 0, 0)')
+        self.previous_button.setStyleSheet(styles.settings_button_style)
         self.previous_button.setIconSize(QSize(60, 60))
         self.previous_button.move(self.background_text.x() - 90, 400 * ratio - 6)
         self.next_button.setIcon(QIcon(os.path.join("materials", "right_arrow.png")))
-        self.next_button.setStyleSheet('background-color: rgb(0, 0, 0, 0)')
+        self.next_button.setStyleSheet(styles.settings_button_style)
         self.next_button.setIconSize(QSize(60, 60))
         self.next_button.move(self.background_text.x() + self.background_text.width() + 20, 400 * ratio - 6)
 

@@ -1,5 +1,6 @@
 import os.path
 import settings
+import styles
 from settings import keys
 from PyQt5 import QtGui
 from PyQt5.QtCore import QSize
@@ -34,23 +35,21 @@ class PrintModeSelection(QWidget):
         self.text.adjustSize()
         self.text.move((self.width() - self.text.width()) // 4, 45 * ratio)
         self.first_text_button.setFixedSize(1024, 268)
-        self.first_text_button.setStyleSheet("QPushButton {background-color: rgb(0, 196, 255);}")
+        self.first_text_button.setStyleSheet(styles.keyboard_layout_button_style)
         self.first_text_button.move((self.width() - self.first_text_button.width()) // 2, 120 * ratio)
         self.first_text_button.setIcon(QIcon(os.path.join("keyboards", "rus.png")))
         self.first_text_button.setIconSize(QSize(1024, 272))
         self.first_text_button.clicked.connect(lambda x: self.select_keyboard_layout('rus'))
         self.first_text_button.setAutoDefault(True)
         self.second_text_button.setFixedSize(1024, 268)
-        self.second_text_button.setStyleSheet("QPushButton {background-color: rgb(0, 196, 255);}")
+        self.second_text_button.setStyleSheet(styles.keyboard_layout_button_style)
         self.second_text_button.move((self.width() - self.second_text_button.width()) // 2, 420 * ratio)
         self.second_text_button.setIcon(QIcon(os.path.join("keyboards", "eng.png")))
         self.second_text_button.setIconSize(QSize(1024, 272))
         self.second_text_button.clicked.connect(lambda x: self.select_keyboard_layout('eng'))
         self.second_text_button.setAutoDefault(True)
         self.mode.move(int((self.width() - self.text.width()) // 1.5), 42 * ratio)
-        self.mode.setStyleSheet('background-color: #570290; border-style: outset; border-width: 2px; '
-                                'border-radius: 10px; border-color: yellow; font: bold '
-                                + str(int(28 * ratio)) + 'px; min-width: 10em; padding: 6px; color: white;')
+        self.mode.setStyleSheet(styles.printing_mode_button_style.format(str(int(28 * ratio))))
         self.mode.setIconSize(QSize(30 * ratio, 30 * ratio))
         self.mode.adjustSize()
 

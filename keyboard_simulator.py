@@ -6,6 +6,7 @@ from PyQt5.QtWidgets import QWidget, QLabel
 from input_field import RightField, LeftField
 from settings import codes
 from statistics_recorder import StatisticsRecorder
+import styles
 
 
 class KeyboardSimulator(QWidget):
@@ -97,10 +98,8 @@ class KeyboardSimulator(QWidget):
         self.configure_elements(ratio)
         self.right_field.setGeometry(450 * ratio, 110 * ratio, 720 * ratio, 50 * ratio)
         self.left_field.setGeometry(60 * ratio, 110 * ratio, 390 * ratio, 50 * ratio)
-        self.right_field.setStyleSheet('background : #abcdef; font-weight: 500; color: black; border: 2px solid green; '
-                                       'border-width : 2px 2px 2px 2px;')
+        self.right_field.setStyleSheet(styles.right_printing_field_style)
         self.right_field.setFont(QFont('Arial', 24 * ratio))
-        self.left_field.setStyleSheet('background : #abcdef; font-weight: 500; color: grey; border: 2px solid green; '
-                                      'border-width : 2px 0px 2px 2px;')
+        self.left_field.setStyleSheet(styles.left_printing_field_style)
         self.left_field.setFont(QFont('Arial', 24 * ratio))
         self.set_keyboard_picture()

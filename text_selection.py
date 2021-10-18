@@ -7,6 +7,7 @@ from PyQt5.QtWidgets import QWidget, QPushButton, QFileDialog
 from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QIcon
 from functools import partial
+import styles
 
 
 class TextSelection(QWidget):
@@ -84,9 +85,7 @@ class TextSelection(QWidget):
                     column += 1
                     row = 1
                 button.move(360 * ratio * column - 240 * ratio, 100 * ratio * row)
-                button.setStyleSheet('background-color: #570290; border-style: outset; border-width: 2px; '
-                                     'border-radius: 4px; border-color: blue; font: bold ' + str(int(26 * ratio))
-                                     + 'px; min-width: 10em; padding: 6px; color: white;')
+                button.setStyleSheet(styles.lesson_button_style.format(str(int(26 * ratio))))
                 if count < 10:
                     self.set_icon(button, count, ratio, progress_rus, progress_eng)
                 button.adjustSize()

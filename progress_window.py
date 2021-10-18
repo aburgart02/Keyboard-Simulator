@@ -2,6 +2,7 @@ import json
 import os.path
 from PyQt5.QtWidgets import QWidget, QLabel, QPushButton
 from settings import keys
+import styles
 
 
 class Progress(QWidget):
@@ -36,34 +37,19 @@ class Progress(QWidget):
 
     def configure_elements(self, ratio):
         self.set_texts(1)
-        self.rus_progress_text.setStyleSheet('background-color: #570290; border-style: outset; border-width: 2px; '
-                                             'border-radius: 4px; border-color: blue; font: bold '
-                                             + str(int(28 * ratio)) + 'px; min-width: 10em; '
-                                             'padding: 6px; color: white;')
+        self.rus_progress_text.setStyleSheet(styles.lesson_button_style.format(str(int(28 * ratio))))
         self.rus_progress_text.move(100 * ratio, 100 * ratio)
         self.rus_progress_text.adjustSize()
-        self.eng_progress_text.setStyleSheet('background-color: #570290; border-style: outset; border-width: 2px; '
-                                             'border-radius: 4px; border-color: blue; font: bold '
-                                             + str(int(28 * ratio)) + 'px; min-width: 10em; '
-                                             'padding: 6px; color: white;')
+        self.eng_progress_text.setStyleSheet(styles.lesson_button_style.format(str(int(28 * ratio))))
         self.eng_progress_text.move(100 * ratio, 200 * ratio)
         self.eng_progress_text.adjustSize()
-        self.rus_max_speed_text.setStyleSheet('background-color: #570290; border-style: outset; border-width: 2px; '
-                                              'border-radius: 4px; border-color: blue; font: bold '
-                                              + str(int(28 * ratio)) + 'px; min-width: 10em; '
-                                              'padding: 6px; color: white;')
+        self.rus_max_speed_text.setStyleSheet(styles.lesson_button_style.format(str(int(28 * ratio))))
         self.rus_max_speed_text.move(100 * ratio, 300 * ratio)
         self.rus_max_speed_text.adjustSize()
-        self.eng_max_speed_text.setStyleSheet('background-color: #570290; border-style: outset; border-width: 2px; '
-                                              'border-radius: 4px; border-color: blue; font: bold '
-                                              + str(int(28 * ratio)) + 'px; min-width: 10em; '
-                                              'padding: 6px; color: white;')
+        self.eng_max_speed_text.setStyleSheet(styles.lesson_button_style.format(str(int(28 * ratio))))
         self.eng_max_speed_text.move(100 * ratio, 400 * ratio)
         self.eng_max_speed_text.adjustSize()
-        self.reset_progress_button.setStyleSheet('background-color: #570290; border-style: outset; border-width: 2px; '
-                                                 'border-radius: 4px; border-color: blue; font: bold '
-                                                 + str(int(28 * ratio)) + 'px; min-width: 10em; '
-                                                 'padding: 6px; color: white;')
+        self.reset_progress_button.setStyleSheet(styles.lesson_button_style.format(str(int(28 * ratio))))
         self.reset_progress_button.move(100 * ratio, 500 * ratio)
         self.reset_progress_button.clicked.connect(self.reset_progress)
         self.reset_progress_button.setAutoDefault(True)

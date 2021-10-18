@@ -9,6 +9,7 @@ from print_mode_selection import PrintModeSelection
 from progress_window import Progress
 from settings_window import Settings
 from settings import keys
+import styles
 
 
 class MainWindow(QWidget):
@@ -84,24 +85,16 @@ class MainWindow(QWidget):
         self.exit_button.setAutoDefault(True)
 
     def configure_elements(self, ratio):
-        self.start_button.setStyleSheet('background-color: #570290; border-style: outset; border-width: 2px; '
-                                        'border-radius: 10px; border-color: yellow; font: bold ' +
-                                        str(int(28 * ratio)) + 'px; min-width: 10em; padding: 6px; color: white;')
+        self.start_button.setStyleSheet(styles.main_menu_button_style.format(str(int(28 * ratio))))
         self.start_button.adjustSize()
         self.start_button.move((self.width() - self.start_button.width()) // 2, int(120 * ratio))
-        self.progress_button.setStyleSheet('background-color: #570290; border-style: outset; border-width: 2px; '
-                                           'border-radius: 10px; border-color: yellow; font: bold '
-                                           + str(int(28 * ratio)) + 'px; min-width: 10em; padding: 6px; color: white;')
+        self.progress_button.setStyleSheet(styles.main_menu_button_style.format(str(int(28 * ratio))))
         self.progress_button.adjustSize()
         self.progress_button.move((self.width() - self.progress_button.width()) // 2, int(220 * ratio))
-        self.settings_button.setStyleSheet('background-color: #570290; border-style: outset; border-width: 2px; '
-                                           'border-radius: 10px; border-color: yellow; font: bold '
-                                           + str(int(28 * ratio)) + 'px; min-width: 10em; padding: 6px; color: white;')
+        self.settings_button.setStyleSheet(styles.main_menu_button_style.format(str(int(28 * ratio))))
         self.settings_button.adjustSize()
         self.settings_button.move((self.width() - self.settings_button.width()) // 2, int(320 * ratio))
-        self.exit_button.setStyleSheet('background-color: #570290; border-style: outset; border-width: 2px; '
-                                       'border-radius: 10px; border-color: yellow; font: bold '
-                                       + str(int(28 * ratio)) + 'px; min-width: 10em; padding: 6px; color: white;')
+        self.exit_button.setStyleSheet(styles.main_menu_button_style.format(str(int(28 * ratio))))
         self.exit_button.adjustSize()
         self.exit_button.move((self.width() - self.exit_button.width()) // 2, int(420 * ratio))
 
