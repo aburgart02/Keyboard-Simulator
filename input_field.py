@@ -34,7 +34,7 @@ class RightField(QTextEdit):
         self.setText(self.type_text)
         self.setReadOnly(True)
         self.media_player = QMediaPlayer()
-        self.sound_file = QUrl.fromLocalFile(os.path.join("sounds", "error_sound.mp3"))
+        self.sound_file = QUrl.fromLocalFile(os.path.join("sounds", "error_sound.wav"))
         self.media_content = QMediaContent(self.sound_file)
         self.media_player.setMedia(self.media_content)
         self.media_player.setVolume(settings.volume_level)
