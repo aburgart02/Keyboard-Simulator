@@ -150,14 +150,14 @@ class TextSelection(QWidget):
     def get_text_file(self):
         try:
             path = QFileDialog.getOpenFileName()[0]
-            with open(path, 'r') as f1:
+            with open(path, 'r', encoding='utf-8-sig') as f1:
                 settings.text = f1.read()
             self.next_window = True
         except FileNotFoundError:
             pass
 
     def set_text(self, path, text_id, text_language):
-        with open(path, 'r') as f1:
+        with open(path, 'r', encoding='utf-8-sig') as f1:
             settings.text = f1.read()
             settings.text_language = text_language
             settings.text_id = text_id
