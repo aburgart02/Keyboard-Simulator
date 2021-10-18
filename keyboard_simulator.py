@@ -13,7 +13,7 @@ class KeyboardSimulator(QWidget):
     def __init__(self, main):
         super().__init__(main)
         self.resolution = main.resolution
-        self.text = settings.text
+        self.text = ' '.join(settings.text.replace('\n', ' ').split())
         self.text_id = settings.text_id
         self.text_language = settings.text_language
         self.right_field = RightField(self, self.text)
