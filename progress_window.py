@@ -29,11 +29,11 @@ class Progress(QWidget):
 
     def get_progress_data(self):
         with open(os.path.join('progress', 'progress.txt'), 'r') as f:
-            data = f.readlines()
-        self.rus_progress = sum(json.loads(data[0]))
-        self.eng_progress = sum(json.loads(data[1]))
-        self.rus_max_speed = json.loads(data[2])
-        self.eng_max_speed = json.loads(data[3])
+            statistics = json.load(f)
+        self.rus_progress = sum(statistics['rus_progress'])
+        self.eng_progress = sum(statistics['eng_progress'])
+        self.rus_max_speed = statistics['rus_max_speed']
+        self.eng_max_speed = statistics['eng_max_speed']
 
     def configure_elements(self, ratio):
         self.set_texts(1)
@@ -67,13 +67,11 @@ class Progress(QWidget):
 
     def reset_progress(self):
         with open(os.path.join('progress', 'progress.txt'), 'w') as f:
-            f.write(json.dumps([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]))
-            f.write('\n')
-            f.write(json.dumps([0, 0, 0, 0, 0, 0, 0, 0, 0, 0]))
-            f.write('\n')
-            f.write(json.dumps(0))
-            f.write('\n')
-            f.write(json.dumps(0))
+            f.write(json.dumps({
+                'rus_progress': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                'eng_progress': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                'rus_max_speed': 0,
+                'eng_max_speed': 0}, indent=4))
         self.set_texts(0)
 
     def change_resolution(self, ratio):

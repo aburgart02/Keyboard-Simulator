@@ -73,9 +73,7 @@ class TextSelection(QWidget):
 
     def configure_elements(self, ratio):
         with open(os.path.join('progress', 'progress.txt'), 'r') as f:
-            data = f.readlines()
-        progress_rus = json.loads(data[0])
-        progress_eng = json.loads(data[1])
+            statistics = json.load(f)
         for buttons in [self.rus_texts, self.eng_texts]:
             count = 0
             row = 1
@@ -87,7 +85,7 @@ class TextSelection(QWidget):
                 button.move(360 * ratio * column - 240 * ratio, 100 * ratio * row)
                 button.setStyleSheet(styles.lesson_button_style.format(str(int(26 * ratio))))
                 if count < 10:
-                    self.set_icon(button, count, ratio, progress_rus, progress_eng)
+                    self.set_icon(button, count, ratio, statistics['rus_progress'], statistics['eng_progress'])
                 button.adjustSize()
                 row += 1
                 count += 1
