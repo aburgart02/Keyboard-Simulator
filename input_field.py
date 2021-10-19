@@ -42,15 +42,18 @@ class RightField(QTextEdit):
         self.timer_flag = False
 
     def keyPressEvent(self, e):
-        if not self.timer_flag:
+        if e.key() == keys['ESC_KEY']:
+            e.ignore()
+        if e.key() == keys['F11_KEY']:
+            e.ignore()
+        elif not self.timer_flag:
             self.timer.start(1000)
             self.timer.timeout.connect(self.tick)
             self.timer_flag = True
+        self.process_keystroke(e)
+
+    def process_keystroke(self, e):
         try:
-            if e.key() == keys['ESC_KEY']:
-                e.ignore()
-            if e.key() == keys['F11_KEY']:
-                e.ignore()
             if e.key() == keys['SHIFT_KEY']:
                 self.is_uppercase = True
             if settings.print_mode:
