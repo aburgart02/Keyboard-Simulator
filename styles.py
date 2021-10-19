@@ -13,3 +13,4 @@ lesson_button_style = 'background-color: #570290; border-style: outset; border-w
 settings_text_style = 'background-color: #570290; border-style: outset; border-width: 2px; border-radius: 4px; ' \
                       'border-color: blue; min-width: 10em; padding: 6px; color: white;'
 settings_button_style = 'background-color: rgb(0, 0, 0, 0)'
+result_text_style = 'font-weight: 500; color: white; font-size: {}pt;'

@@ -1,5 +1,6 @@
-import settings
 import os.path
+import settings
+from settings import keys
 from PyQt5 import QtGui, QtCore
 from PyQt5.QtGui import QPixmap, QFont
 from PyQt5.QtWidgets import QWidget, QLabel
@@ -26,6 +27,12 @@ class KeyboardSimulator(QWidget):
         self.text_size = QLabel(self)
         self.accuracy_counter = QLabel(self)
         self.picture_slot = QLabel(self)
+        self.success_text = QLabel('Упражнение пройдено', self)
+        self.success_text.hide()
+        self.failure_text = QLabel('Для прохождения необходима точность > 80% и\n'
+                                   '        скорость печати > 150 знаков/минуту', self)
+        self.failure_text.hide()
+        self.is_finished = False
         self.toggle_full_screen = False
         self.previous_window = False
         self.pixmap = None
@@ -34,6 +41,12 @@ class KeyboardSimulator(QWidget):
         self.global_timer = QtCore.QTimer()
         self.global_timer.timeout.connect(self.update_data)
         self.global_timer.start(10)
+
+    def keyPressEvent(self, e):
+        if e.key() == keys['ESC_KEY']:
+            self.previous_window = True
+        if e.key() == keys['F11_KEY']:
+            self.toggle_full_screen = True
 
     def update_data(self):
         self.errors_counter.setText("Число ошибок: " + str(self.right_field.errors))
@@ -64,8 +77,20 @@ class KeyboardSimulator(QWidget):
 
     def finish_printing(self):
         self.global_timer.stop()
+        self.show_result()
+        self.is_finished = True
         self.statistics_recorder = StatisticsRecorder(self.text_id, self.text_language, self.speed_counter)
         self.statistics_recorder.record_statistics()
+
+    def show_result(self):
+        self.right_field.hide()
+        self.left_field.hide()
+        self.picture_slot.hide()
+        if int(self.speed_counter.text().split()[3]) > 150 \
+                and int(self.accuracy_counter.text().split()[1].replace('%', '')) > 80:
+            self.success_text.show()
+        else:
+            self.failure_text.show()
 
     def set_keyboard_picture(self):
         self.pixmap = QPixmap((os.path.join('keyboards',
@@ -81,16 +106,28 @@ class KeyboardSimulator(QWidget):
     def configure_elements(self, ratio):
         self.errors_counter.move(60 * ratio, 30 * ratio)
         self.errors_counter.setFont(QtGui.QFont("Arial", 12 * ratio, QtGui.QFont.Bold))
+        self.errors_counter.adjustSize()
         self.timer.move(270 * ratio, 30 * ratio)
         self.timer.setFont(QtGui.QFont("Arial", 12 * ratio, QtGui.QFont.Bold))
+        self.timer.adjustSize()
         self.progress_counter.move(470 * ratio, 30 * ratio)
         self.progress_counter.setFont(QtGui.QFont("Arial", 12 * ratio, QtGui.QFont.Bold))
+        self.progress_counter.adjustSize()
         self.speed_counter.move(670 * ratio, 30 * ratio)
         self.speed_counter.setFont(QtGui.QFont("Arial", 12 * ratio, QtGui.QFont.Bold))
+        self.speed_counter.adjustSize()
         self.text_size.move(910 * ratio, 30 * ratio)
         self.text_size.setFont(QtGui.QFont("Arial", 12 * ratio, QtGui.QFont.Bold))
+        self.text_size.adjustSize()
         self.accuracy_counter.move(1110 * ratio, 30 * ratio)
         self.accuracy_counter.setFont(QtGui.QFont("Arial", 12 * ratio, QtGui.QFont.Bold))
+        self.accuracy_counter.adjustSize()
+        self.success_text.setStyleSheet(styles.result_text_style.format(str(24 * ratio)))
+        self.success_text.adjustSize()
+        self.success_text.move((self.width() - self.success_text.width()) // 2, 300 * ratio)
+        self.failure_text.setStyleSheet(styles.result_text_style.format(str(24 * ratio)))
+        self.failure_text.adjustSize()
+        self.failure_text.move((self.width() - self.failure_text.width()) // 2, 300 * ratio)
         self.picture_slot.move(0, 240 * ratio)
 
     def change_resolution(self, ratio):
@@ -102,4 +139,5 @@ class KeyboardSimulator(QWidget):
         self.right_field.setFont(QFont('Arial', 24 * ratio))
         self.left_field.setStyleSheet(styles.left_printing_field_style)
         self.left_field.setFont(QFont('Arial', 24 * ratio))
-        self.set_keyboard_picture()
+        if not self.is_finished:
+            self.set_keyboard_picture()

@@ -12,7 +12,6 @@ from settings import keys
 class RightField(QTextEdit):
     def __init__(self, window, text):
         super().__init__(window)
-        self.keyboard_simulator = window
         self.setGeometry(450, 110, 720, 50)
         self.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         self.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
@@ -49,9 +48,9 @@ class RightField(QTextEdit):
             self.timer_flag = True
         try:
             if e.key() == keys['ESC_KEY']:
-                self.keyboard_simulator.previous_window = True
+                e.ignore()
             if e.key() == keys['F11_KEY']:
-                self.keyboard_simulator.toggle_full_screen = True
+                e.ignore()
             if e.key() == keys['SHIFT_KEY']:
                 self.is_uppercase = True
             if settings.print_mode:
