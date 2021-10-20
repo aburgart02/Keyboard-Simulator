@@ -1,7 +1,6 @@
 import sys
 import os.path
 import settings
-import json
 from PyQt5 import QtGui
 from PyQt5.QtCore import QEvent, Qt
 from PyQt5.QtWidgets import QApplication
@@ -60,19 +59,9 @@ class TestSettings:
 
 
 class TestProgress:
-    def test_languages_progress_getting(self):
-        with open(os.path.join('progress', 'progress.txt'), 'r') as f:
-            statistics = json.load(f)
-        progress_window.get_progress_data()
-        assert progress_window.rus_progress == sum(statistics['rus_progress']) \
-               and progress_window.eng_progress == sum(statistics['eng_progress'])
-
-    def test_highest_speed_getting(self):
-        with open(os.path.join('progress', 'progress.txt'), 'r') as f:
-            statistics = json.load(f)
-        progress_window.get_progress_data()
-        assert progress_window.rus_max_speed == statistics['rus_max_speed'] \
-               and progress_window.eng_max_speed == statistics['eng_max_speed']
+    def test_graph_creation(self):
+        progress_window.get_progress_data('rus_progress')
+        assert progress_window.graph is not None
 
 
 class TestPrintModeSelection:
@@ -117,9 +106,9 @@ class TestKeyboardSimulator:
     def test_timer_activity(self):
         assert keyboard_simulator_window.global_timer.isActive()
 
-    def test_printing_finish(self):
+    def test_printing_finish_unfulfilled_requirements(self):
         keyboard_simulator_window.finish_printing()
-        assert keyboard_simulator_window.statistics_recorder is not None
+        assert keyboard_simulator_window.statistics_recorder is None
 
     def test_keyboard_picture_slot(self):
         keyboard_simulator_window.set_keyboard_picture()

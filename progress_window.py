@@ -57,7 +57,8 @@ class Progress(QWidget):
         self.reset_progress_button.clicked.connect(self.reset_progress)
         self.reset_progress_button.setAutoDefault(True)
 
-    def reset_progress(self):
+    @staticmethod
+    def reset_progress():
         with open(os.path.join('progress', 'progress.txt'), 'w') as f:
             f.write(json.dumps({
                 'rus_progress': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
