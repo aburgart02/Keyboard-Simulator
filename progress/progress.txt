@@ -22,7 +22,5 @@
         0,
         0,
         0
-    ],
-    "rus_max_speed": 0,
-    "eng_max_speed": 0
+    ]
 }

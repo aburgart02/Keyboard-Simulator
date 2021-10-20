@@ -1,6 +1,7 @@
 import json
 import os.path
-from PyQt5.QtWidgets import QWidget, QLabel, QPushButton
+import pyqtgraph
+from PyQt5.QtWidgets import QWidget, QPushButton, QGridLayout
 from settings import keys
 import styles
 
@@ -10,16 +11,13 @@ class Progress(QWidget):
         super().__init__(main)
         self.application = main
         self.previous_window = False
-        self.rus_progress_text = QLabel('Прогресс обучения на русской раскладке: ', self)
-        self.eng_progress_text = QLabel('Progress of learning in the english layout: ', self)
-        self.rus_max_speed_text = QLabel('Наибольшая скорость печати на русской раскладке: ', self)
-        self.eng_max_speed_text = QLabel('The highest printing speed on the english layout: ', self)
-        self.reset_progress_button = QPushButton('Reset progress', self)
-        self.rus_progress = 0
-        self.eng_progress = 0
-        self.rus_max_speed = 0
-        self.eng_max_speed = 0
-        self.get_progress_data()
+        self.graph = None
+        self.layout = QGridLayout(self)
+        self.layout.setContentsMargins(0, 0, 0, 200)
+        self.rus_progress_button = QPushButton('Русская раскладка', self)
+        self.eng_progress_button = QPushButton('Английская раскладка', self)
+        self.reset_progress_button = QPushButton('Сбросить прогресс', self)
+        self.assign_buttons()
 
     def keyPressEvent(self, e):
         if e.key() == keys['ESC_KEY']:
@@ -30,52 +28,41 @@ class Progress(QWidget):
                 else self.change_resolution(self.application.resolution_ratio)
             e.ignore()
 
-    def get_progress_data(self):
+    def get_progress_data(self, language):
+        self.layout.removeWidget(self.graph)
+        self.graph = pyqtgraph.plot()
         with open(os.path.join('progress', 'progress.txt'), 'r') as f:
             statistics = json.load(f)
-        self.rus_progress = sum(statistics['rus_progress'])
-        self.eng_progress = sum(statistics['eng_progress'])
-        self.rus_max_speed = statistics['rus_max_speed']
-        self.eng_max_speed = statistics['eng_max_speed']
+        progress = statistics[language]
+        chart = pyqtgraph.BarGraphItem(x=[i for i in range(1, 11)], height=progress, width=1, brush='b')
+        self.graph.addItem(chart)
+        self.layout.addWidget(self.graph)
 
     def configure_elements(self, ratio):
-        self.set_texts(1)
-        self.rus_progress_text.setStyleSheet(styles.lesson_button_style.format(str(int(28 * ratio))))
-        self.rus_progress_text.move(100 * ratio, 100 * ratio)
-        self.rus_progress_text.adjustSize()
-        self.eng_progress_text.setStyleSheet(styles.lesson_button_style.format(str(int(28 * ratio))))
-        self.eng_progress_text.move(100 * ratio, 200 * ratio)
-        self.eng_progress_text.adjustSize()
-        self.rus_max_speed_text.setStyleSheet(styles.lesson_button_style.format(str(int(28 * ratio))))
-        self.rus_max_speed_text.move(100 * ratio, 300 * ratio)
-        self.rus_max_speed_text.adjustSize()
-        self.eng_max_speed_text.setStyleSheet(styles.lesson_button_style.format(str(int(28 * ratio))))
-        self.eng_max_speed_text.move(100 * ratio, 400 * ratio)
-        self.eng_max_speed_text.adjustSize()
-        self.reset_progress_button.setStyleSheet(styles.lesson_button_style.format(str(int(28 * ratio))))
-        self.reset_progress_button.move(100 * ratio, 500 * ratio)
+        self.rus_progress_button.setStyleSheet(styles.lesson_button_style.format(str(int(20 * ratio))))
+        self.rus_progress_button.adjustSize()
+        self.rus_progress_button.move(500 * ratio, 600 * ratio)
+        self.eng_progress_button.setStyleSheet(styles.lesson_button_style.format(str(int(20 * ratio))))
+        self.eng_progress_button.adjustSize()
+        self.eng_progress_button.move(900 * ratio, 600 * ratio)
+        self.reset_progress_button.setStyleSheet(styles.lesson_button_style.format(str(int(20 * ratio))))
+        self.reset_progress_button.adjustSize()
+        self.reset_progress_button.move(100 * ratio, 600 * ratio)
+
+    def assign_buttons(self):
+        self.rus_progress_button.clicked.connect(lambda x: self.get_progress_data('rus_progress'))
+        self.rus_progress_button.setAutoDefault(True)
+        self.eng_progress_button.clicked.connect(lambda x: self.get_progress_data('eng_progress'))
+        self.eng_progress_button.setAutoDefault(True)
         self.reset_progress_button.clicked.connect(self.reset_progress)
         self.reset_progress_button.setAutoDefault(True)
-        self.reset_progress_button.adjustSize()
-
-    def set_texts(self, reset_flag):
-        self.rus_progress_text.setText('Прогресс обучения на русской раскладке: '
-                                       + str(self.rus_progress * 10 * reset_flag) + '%')
-        self.eng_progress_text.setText('Progress of learning in the english layout: '
-                                       + str(self.eng_progress * 10 * reset_flag) + '%')
-        self.rus_max_speed_text.setText('Наибольшая скорость печати на русской раскладке: '
-                                        + str(self.rus_max_speed * reset_flag) + ' знаков в минуту')
-        self.eng_max_speed_text.setText('The highest printing speed on the english layout: '
-                                        + str(self.eng_max_speed * reset_flag) + ' characters per minute')
 
     def reset_progress(self):
         with open(os.path.join('progress', 'progress.txt'), 'w') as f:
             f.write(json.dumps({
                 'rus_progress': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                'eng_progress': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                'rus_max_speed': 0,
-                'eng_max_speed': 0}, indent=4))
-        self.set_texts(0)
+                'eng_progress': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]},
+                indent=4))
 
     def change_resolution(self, ratio):
         self.setFixedSize(1280 * ratio, 720 * ratio)

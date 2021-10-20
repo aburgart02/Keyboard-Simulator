@@ -81,18 +81,19 @@ class KeyboardSimulator(QWidget):
         self.global_timer.stop()
         self.show_result()
         self.is_finished = True
-        self.statistics_recorder = StatisticsRecorder(self.text_id, self.text_language, self.speed_counter)
-        self.statistics_recorder.record_statistics()
+        if self.check_requirements():
+            self.statistics_recorder = StatisticsRecorder(self.text_id, self.text_language, self.speed_counter)
+            self.statistics_recorder.record_statistics()
 
     def show_result(self):
         self.right_field.hide()
         self.left_field.hide()
         self.picture_slot.hide()
-        if int(self.speed_counter.text().split()[3]) > 150 \
-                and int(self.accuracy_counter.text().split()[1].replace('%', '')) > 80:
-            self.success_text.show()
-        else:
-            self.failure_text.show()
+        self.success_text.show() if self.check_requirements() else self.failure_text.show()
+
+    def check_requirements(self):
+        return int(self.speed_counter.text().split()[3]) > 150 \
+               and int(self.accuracy_counter.text().split()[1].replace('%', '')) > 80
 
     def set_keyboard_picture(self):
         self.pixmap = QPixmap((os.path.join('keyboards',
