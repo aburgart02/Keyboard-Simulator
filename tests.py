@@ -36,9 +36,6 @@ class TestMainWindow:
         main_window.change_main_window_resolution()
         assert not main_window.isFullScreen()
 
-    def test_timer_activity(self):
-        assert main_window.global_timer.isActive()
-
 
 class TestSettings:
     def test_volume_addition(self):
@@ -65,17 +62,17 @@ class TestSettings:
 class TestProgress:
     def test_languages_progress_getting(self):
         with open(os.path.join('progress', 'progress.txt'), 'r') as f:
-            data = f.readlines()
+            statistics = json.load(f)
         progress_window.get_progress_data()
-        assert progress_window.rus_progress == sum(json.loads(data[0])) \
-               and progress_window.eng_progress == sum(json.loads(data[1]))
+        assert progress_window.rus_progress == sum(statistics['rus_progress']) \
+               and progress_window.eng_progress == sum(statistics['eng_progress'])
 
     def test_highest_speed_getting(self):
         with open(os.path.join('progress', 'progress.txt'), 'r') as f:
-            data = f.readlines()
+            statistics = json.load(f)
         progress_window.get_progress_data()
-        assert progress_window.rus_max_speed == json.loads(data[2]) \
-               and progress_window.eng_max_speed == json.loads(data[3])
+        assert progress_window.rus_max_speed == statistics['rus_max_speed'] \
+               and progress_window.eng_max_speed == statistics['eng_max_speed']
 
 
 class TestPrintModeSelection:
@@ -110,7 +107,7 @@ class TestTextSelection:
         assert len(text_selection_window.eng_texts) == 15
 
     def test_text_setting(self):
-        with open(os.path.join('texts', 'eng_texts', 't1.txt'), 'r') as f:
+        with open(os.path.join('texts', 'eng_texts', 't1.txt'), 'r', encoding='utf-8-sig') as f:
             text = f.read()
         text_selection_window.set_text(os.path.join('texts', 'eng_texts', 't1.txt'), 1, 1)
         assert settings.text == text and settings.text_language == 1 and settings.text_id == 1
