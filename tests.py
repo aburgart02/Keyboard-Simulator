@@ -5,7 +5,7 @@ import json
 from PyQt5 import QtGui
 from PyQt5.QtCore import QEvent, Qt
 from PyQt5.QtWidgets import QApplication
-from main_window import MainWindow
+from application_window import MainWindow
 from keyboard_simulator import KeyboardSimulator
 from settings_window import Settings
 from print_mode_selection import PrintModeSelection
