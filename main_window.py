@@ -1,5 +1,4 @@
 import os.path
-from PyQt5 import QtCore
 from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QImage, QPalette, QBrush
 from PyQt5.QtWidgets import QWidget, QPushButton, QDesktopWidget
@@ -42,11 +41,6 @@ class MainWindow(QWidget):
         self.set_background(1)
         self.configure_elements(1)
         self.assign_buttons()
-        self.global_timer = QtCore.QTimer()
-        self.global_timer.timeout.connect(self.switch_windows)
-        self.global_timer.timeout.connect(self.check_windows_resolution)
-        self.global_timer.timeout.connect(self.change_background)
-        self.global_timer.start(100)
         self.show()
 
     def keyPressEvent(self, e):
@@ -69,10 +63,7 @@ class MainWindow(QWidget):
         if self.settings_widget.background_file != self.background_file:
             self.background_file = self.settings_widget.background_file
             self.image = QImage(self.background_file)
-            if self.isFullScreen():
-                self.set_background(self.resolution_ratio)
-            else:
-                self.set_background(1)
+            self.set_background(self.resolution_ratio) if self.isFullScreen() else self.set_background(1)
 
     def assign_buttons(self):
         self.start_button.clicked.connect(self.display_print_mode_selection_window)
@@ -110,13 +101,6 @@ class MainWindow(QWidget):
                 widget[0].next_window = False
                 widget[2]()
 
-    def check_windows_resolution(self):
-        for widget in self.widgets_list:
-            if widget[0].toggle_full_screen:
-                self.change_widget_resolution(widget[0], True)
-                self.change_main_window_resolution()
-                widget[0].toggle_full_screen = False
-
     def change_main_window_resolution(self):
         if self.isFullScreen():
             self.showNormal()
@@ -127,17 +111,8 @@ class MainWindow(QWidget):
             self.set_background(self.resolution_ratio)
             self.configure_elements(self.resolution_ratio)
 
-    def change_widget_resolution(self, widget, mode):
-        if mode:
-            if self.isFullScreen():
-                widget.change_resolution(1)
-            else:
-                widget.change_resolution(self.resolution_ratio)
-        else:
-            if self.isFullScreen():
-                widget.change_resolution(self.resolution_ratio)
-            else:
-                widget.change_resolution(1)
+    def change_widget_resolution(self, widget):
+        widget.change_resolution(self.resolution_ratio) if self.isFullScreen() else widget.change_resolution(1)
 
     def display_main_window(self):
         self.start_button.setFocus()
@@ -155,18 +130,18 @@ class MainWindow(QWidget):
     def display_keyboard_simulator_window(self):
         self.keyboard_simulator_widget = KeyboardSimulator(self)
         self.widgets_list[3] = (self.keyboard_simulator_widget, self.display_text_selection_window)
-        self.change_widget_resolution(self.keyboard_simulator_widget, False)
+        self.change_widget_resolution(self.keyboard_simulator_widget)
         self.keyboard_simulator_widget.show()
         self.keyboard_simulator_widget.right_field.setFocus()
 
     def display_print_mode_selection_window(self):
-        self.change_widget_resolution(self.print_mode_selection_widget, False)
+        self.change_widget_resolution(self.print_mode_selection_widget)
         self.hide_main_window()
         self.print_mode_selection_widget.show()
         self.print_mode_selection_widget.first_text_button.setFocus()
 
     def display_settings_window(self):
-        self.change_widget_resolution(self.settings_widget, False)
+        self.change_widget_resolution(self.settings_widget)
         self.hide_main_window()
         self.settings_widget.show()
         self.settings_widget.decrease_volume_button.setFocus()
@@ -174,13 +149,13 @@ class MainWindow(QWidget):
     def display_progress_window(self):
         self.progress_widget = Progress(self)
         self.widgets_list[4] = (self.progress_widget, self.display_main_window)
-        self.change_widget_resolution(self.progress_widget, False)
+        self.change_widget_resolution(self.progress_widget)
         self.hide_main_window()
         self.progress_widget.show()
         self.progress_widget.reset_progress_button.setFocus()
 
     def display_text_selection_window(self):
-        self.change_widget_resolution(self.text_selection_widget, False)
+        self.change_widget_resolution(self.text_selection_widget)
         self.text_selection_widget.show()
         if self.print_mode_selection_widget.keyboard_layout == 'rus':
             self.text_selection_widget.set_rus_texts()

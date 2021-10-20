@@ -11,9 +11,9 @@ from PyQt5.QtWidgets import QWidget, QLabel, QPushButton
 class PrintModeSelection(QWidget):
     def __init__(self, main):
         super().__init__(main)
+        self.application = main
         self.next_window = False
         self.previous_window = False
-        self.toggle_full_screen = False
         self.keyboard_layout = ''
         self.text = QLabel("Select the mode", self)
         self.first_text_button = QPushButton(self)
@@ -27,8 +27,11 @@ class PrintModeSelection(QWidget):
     def keyPressEvent(self, e):
         if e.key() == keys['ESC_KEY']:
             self.previous_window = True
+            self.application.switch_windows()
         if e.key() == keys['F11_KEY']:
-            self.toggle_full_screen = True
+            self.change_resolution(1) if self.application.isFullScreen() \
+                else self.change_resolution(self.application.resolution_ratio)
+            e.ignore()
 
     def configure_elements(self, ratio):
         self.text.setFont(QtGui.QFont("Arial", 22 * ratio, QtGui.QFont.Bold))
@@ -60,6 +63,7 @@ class PrintModeSelection(QWidget):
     def select_keyboard_layout(self, language):
         self.next_window = True
         self.keyboard_layout = language
+        self.application.switch_windows()
 
     def change_mode(self):
         if settings.print_mode:

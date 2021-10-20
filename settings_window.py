@@ -11,8 +11,8 @@ import styles
 class Settings(QWidget):
     def __init__(self, main):
         super().__init__(main)
+        self.application = main
         self.previous_window = False
-        self.toggle_full_screen = False
         self.background_file_index = 0
         self.background_file = os.path.join("backgrounds", "background_0.jpg")
         self.background_text = QLabel("Background", self)
@@ -34,8 +34,11 @@ class Settings(QWidget):
     def keyPressEvent(self, e):
         if e.key() == keys['ESC_KEY']:
             self.previous_window = True
+            self.application.switch_windows()
         if e.key() == keys['F11_KEY']:
-            self.toggle_full_screen = True
+            self.change_resolution(1) if self.application.isFullScreen() \
+                else self.change_resolution(self.application.resolution_ratio)
+            e.ignore()
 
     def configure_elements(self, ratio):
         self.volume_level_text.setFont(QtGui.QFont("Arial", 20, QtGui.QFont.Bold))
@@ -75,6 +78,7 @@ class Settings(QWidget):
             self.background_file_index -= 1
         self.background_file_index = self.background_file_index % 4
         self.background_file = os.path.join("backgrounds", "background_" + str(self.background_file_index) + ".jpg")
+        self.application.change_background()
 
     def change_volume(self, mode):
         if mode and settings.volume_level < 100:

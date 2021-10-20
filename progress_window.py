@@ -8,7 +8,7 @@ import styles
 class Progress(QWidget):
     def __init__(self, main):
         super().__init__(main)
-        self.toggle_full_screen = False
+        self.application = main
         self.previous_window = False
         self.rus_progress_text = QLabel('Прогресс обучения на русской раскладке: ', self)
         self.eng_progress_text = QLabel('Progress of learning in the english layout: ', self)
@@ -24,8 +24,11 @@ class Progress(QWidget):
     def keyPressEvent(self, e):
         if e.key() == keys['ESC_KEY']:
             self.previous_window = True
+            self.application.switch_windows()
         if e.key() == keys['F11_KEY']:
-            self.toggle_full_screen = True
+            self.change_resolution(1) if self.application.isFullScreen() \
+                else self.change_resolution(self.application.resolution_ratio)
+            e.ignore()
 
     def get_progress_data(self):
         with open(os.path.join('progress', 'progress.txt'), 'r') as f:

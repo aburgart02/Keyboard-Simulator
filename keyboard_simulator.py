@@ -13,7 +13,7 @@ import styles
 class KeyboardSimulator(QWidget):
     def __init__(self, main):
         super().__init__(main)
-        self.resolution = main.resolution
+        self.application = main
         self.text = ' '.join(settings.text.replace('\n', ' ').split())
         self.text_id = settings.text_id
         self.text_language = settings.text_language
@@ -33,7 +33,6 @@ class KeyboardSimulator(QWidget):
                                    '        скорость печати > 150 знаков/минуту', self)
         self.failure_text.hide()
         self.is_finished = False
-        self.toggle_full_screen = False
         self.previous_window = False
         self.pixmap = None
         self.configure_elements(1)
@@ -45,8 +44,11 @@ class KeyboardSimulator(QWidget):
     def keyPressEvent(self, e):
         if e.key() == keys['ESC_KEY']:
             self.previous_window = True
+            self.application.switch_windows()
         if e.key() == keys['F11_KEY']:
-            self.toggle_full_screen = True
+            self.change_resolution(1) if self.application.isFullScreen() \
+                else self.change_resolution(self.application.resolution_ratio)
+            e.ignore()
 
     def update_data(self):
         self.errors_counter.setText("Число ошибок: " + str(self.right_field.errors))
@@ -99,9 +101,10 @@ class KeyboardSimulator(QWidget):
         if self.width() == 1280:
             self.picture_slot.setPixmap(self.pixmap.scaled(1280, self.pixmap.height()
                                                            // (self.pixmap.width() / 1280)))
-        if self.width() == self.resolution.width():
-            self.picture_slot.setPixmap(self.pixmap.scaled(self.resolution.width(), self.pixmap.height()
-                                                           // (self.pixmap.width() / self.resolution.width())))
+        if self.width() == self.application.resolution.width():
+            self.picture_slot.setPixmap(self.pixmap.scaled(
+                self.application.resolution.width(),
+                self.pixmap.height() // (self.pixmap.width() / self.application.resolution.width())))
 
     def configure_elements(self, ratio):
         self.errors_counter.move(60 * ratio, 30 * ratio)

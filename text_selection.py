@@ -13,9 +13,9 @@ import styles
 class TextSelection(QWidget):
     def __init__(self, main):
         super().__init__(main)
+        self.application = main
         self.next_window = False
         self.previous_window = False
-        self.toggle_full_screen = False
         self.initialize_rus_texts()
         self.initialize_eng_texts()
         self.mark_picture = QIcon(os.path.join('materials', 'mark.png'))
@@ -26,8 +26,11 @@ class TextSelection(QWidget):
     def keyPressEvent(self, e):
         if e.key() == keys['ESC_KEY']:
             self.previous_window = True
+            self.application.switch_windows()
         if e.key() == keys['F11_KEY']:
-            self.toggle_full_screen = True
+            self.change_resolution(1) if self.application.isFullScreen() \
+                else self.change_resolution(self.application.resolution_ratio)
+            e.ignore()
 
     def initialize_rus_texts(self):
         self.rus_lesson_1 = QPushButton("       Урок 1", self)
@@ -144,6 +147,7 @@ class TextSelection(QWidget):
         settings.text = text.strip()
         settings.text_language = text_language
         self.next_window = True
+        self.application.switch_windows()
 
     def get_text_file(self):
         try:
@@ -151,6 +155,7 @@ class TextSelection(QWidget):
             with open(path, 'r', encoding='utf-8-sig') as f1:
                 settings.text = f1.read()
             self.next_window = True
+            self.application.switch_windows()
         except FileNotFoundError:
             pass
 
@@ -160,3 +165,4 @@ class TextSelection(QWidget):
             settings.text_language = text_language
             settings.text_id = text_id
         self.next_window = True
+        self.application.switch_windows()
