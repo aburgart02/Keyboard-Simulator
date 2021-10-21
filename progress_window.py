@@ -50,13 +50,13 @@ class Progress(QWidget):
     def configure_elements(self, ratio):
         self.rus_progress_button.setStyleSheet(styles.lesson_button_style.format(str(int(20 * ratio))))
         self.rus_progress_button.adjustSize()
-        self.rus_progress_button.move(500 * ratio, 600 * ratio)
+        self.rus_progress_button.move(100 * ratio, 600 * ratio)
         self.eng_progress_button.setStyleSheet(styles.lesson_button_style.format(str(int(20 * ratio))))
         self.eng_progress_button.adjustSize()
-        self.eng_progress_button.move(900 * ratio, 600 * ratio)
+        self.eng_progress_button.move(500 * ratio, 600 * ratio)
         self.reset_progress_button.setStyleSheet(styles.lesson_button_style.format(str(int(20 * ratio))))
         self.reset_progress_button.adjustSize()
-        self.reset_progress_button.move(100 * ratio, 600 * ratio)
+        self.reset_progress_button.move(900 * ratio, 600 * ratio)
 
     def assign_buttons(self):
         self.rus_progress_button.clicked.connect(lambda x: self.create_statistics_graph('rus_progress'))
