@@ -44,9 +44,11 @@ class RightField(QTextEdit):
     def keyPressEvent(self, e):
         if e.key() == keys['ESC_KEY']:
             e.ignore()
+            return
         if e.key() == keys['F11_KEY']:
             e.ignore()
-        elif not self.timer_flag:
+            return
+        if not self.timer_flag:
             self.timer.start(1000)
             self.timer.timeout.connect(self.tick)
             self.timer_flag = True
