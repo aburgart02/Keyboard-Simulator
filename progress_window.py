@@ -11,9 +11,11 @@ class Progress(QWidget):
         super().__init__(main)
         self.application = main
         self.previous_window = False
+        pyqtgraph.setConfigOption('background', '#ffffff')
         self.graph = None
         self.layout = QGridLayout(self)
         self.layout.setContentsMargins(0, 0, 0, 200)
+        self.styles = {'color': '#0000ff', 'font-size': '24px'}
         self.rus_progress_button = QPushButton('Русская раскладка', self)
         self.eng_progress_button = QPushButton('Английская раскладка', self)
         self.reset_progress_button = QPushButton('Сбросить прогресс', self)
@@ -28,15 +30,22 @@ class Progress(QWidget):
                 else self.change_resolution(self.application.resolution_ratio)
             e.ignore()
 
-    def get_progress_data(self, language):
+    def create_statistics_graph(self, language):
         self.layout.removeWidget(self.graph)
-        self.graph = pyqtgraph.plot()
+        self.graph = pyqtgraph.PlotWidget()
+        self.configure_graph(language)
         with open(os.path.join('progress', 'progress.txt'), 'r') as f:
             statistics = json.load(f)
-        progress = statistics[language]
-        chart = pyqtgraph.BarGraphItem(x=[i for i in range(1, 11)], height=progress, width=1, brush='b')
+        chart = pyqtgraph.BarGraphItem(x=[i for i in range(1, 11)], height=statistics[language], width=1, brush='b')
         self.graph.addItem(chart)
         self.layout.addWidget(self.graph)
+
+    def configure_graph(self, language):
+        self.graph.setTitle("Русская раскладка", color="b", size="20pt") if language == 'rus_progress' \
+            else self.graph.setTitle("Английская раскладка", color="b", size="20pt")
+        self.graph.setLabel('left', 'Скорость печати', **self.styles)
+        self.graph.setLabel('bottom', 'Номер урока', **self.styles)
+        self.graph.setXRange(1, 10)
 
     def configure_elements(self, ratio):
         self.rus_progress_button.setStyleSheet(styles.lesson_button_style.format(str(int(20 * ratio))))
@@ -50,9 +59,9 @@ class Progress(QWidget):
         self.reset_progress_button.move(100 * ratio, 600 * ratio)
 
     def assign_buttons(self):
-        self.rus_progress_button.clicked.connect(lambda x: self.get_progress_data('rus_progress'))
+        self.rus_progress_button.clicked.connect(lambda x: self.create_statistics_graph('rus_progress'))
         self.rus_progress_button.setAutoDefault(True)
-        self.eng_progress_button.clicked.connect(lambda x: self.get_progress_data('eng_progress'))
+        self.eng_progress_button.clicked.connect(lambda x: self.create_statistics_graph('eng_progress'))
         self.eng_progress_button.setAutoDefault(True)
         self.reset_progress_button.clicked.connect(self.reset_progress)
         self.reset_progress_button.setAutoDefault(True)

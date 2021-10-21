@@ -60,7 +60,7 @@ class TestSettings:
 
 class TestProgress:
     def test_graph_creation(self):
-        progress_window.get_progress_data('rus_progress')
+        progress_window.create_statistics_graph('rus_progress')
         assert progress_window.graph is not None
 
 
