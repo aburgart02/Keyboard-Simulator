@@ -2,7 +2,8 @@ import random
 import json
 import os.path
 import settings
-from settings import keys
+from key_handler import key_processing
+from settings import rus_button_names, eng_button_names
 from PyQt5.QtWidgets import QWidget, QPushButton, QFileDialog
 from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QIcon
@@ -16,6 +17,8 @@ class TextSelection(QWidget):
         self.application = main
         self.next_window = False
         self.previous_window = False
+        self.rus_texts = []
+        self.eng_texts = []
         self.initialize_rus_texts()
         self.initialize_eng_texts()
         self.mark_picture = QIcon(os.path.join('materials', 'mark.png'))
@@ -24,55 +27,17 @@ class TextSelection(QWidget):
         self.configure_elements(1)
 
     def keyPressEvent(self, e):
-        if e.key() == keys['ESC_KEY']:
-            self.previous_window = True
-            self.application.switch_windows()
-        if e.key() == keys['F11_KEY']:
-            self.change_resolution(1) if self.application.isFullScreen() \
-                else self.change_resolution(self.application.resolution_ratio)
-            e.ignore()
+        key_processing(self, e)
 
     def initialize_rus_texts(self):
-        self.rus_lesson_1 = QPushButton("       Урок 1", self)
-        self.rus_lesson_2 = QPushButton("       Урок 2", self)
-        self.rus_lesson_3 = QPushButton("       Урок 3", self)
-        self.rus_lesson_4 = QPushButton("       Урок 4", self)
-        self.rus_lesson_5 = QPushButton("       Урок 5", self)
-        self.rus_lesson_6 = QPushButton("       Урок 6", self)
-        self.rus_lesson_7 = QPushButton("       Урок 7", self)
-        self.rus_lesson_8 = QPushButton("       Урок 8", self)
-        self.rus_lesson_9 = QPushButton("       Урок 9", self)
-        self.rus_lesson_10 = QPushButton("       Урок 10", self)
-        self.rus_text_1 = QPushButton("Короткий книжный текст", self)
-        self.rus_text_2 = QPushButton("Средний книжный текст", self)
-        self.rus_text_3 = QPushButton("Длинный книжный текст", self)
-        self.rus_random_text = QPushButton("Случайный текст", self)
-        self.rus_my_text = QPushButton("Выбрать свой текст", self)
-        self.rus_texts = [self.rus_lesson_1, self.rus_lesson_2, self.rus_lesson_3, self.rus_lesson_4,
-                          self.rus_lesson_5, self.rus_lesson_6, self.rus_lesson_7, self.rus_lesson_8,
-                          self.rus_lesson_9, self.rus_lesson_10, self.rus_text_1, self.rus_text_2,
-                          self.rus_text_3, self.rus_random_text, self.rus_my_text]
+        for name in rus_button_names:
+            button = QPushButton(name, self)
+            self.rus_texts.append(button)
 
     def initialize_eng_texts(self):
-        self.eng_lesson_1 = QPushButton("       Lesson 1", self)
-        self.eng_lesson_2 = QPushButton("       Lesson 2", self)
-        self.eng_lesson_3 = QPushButton("       Lesson 3", self)
-        self.eng_lesson_4 = QPushButton("       Lesson 4", self)
-        self.eng_lesson_5 = QPushButton("       Lesson 5", self)
-        self.eng_lesson_6 = QPushButton("       Lesson 6", self)
-        self.eng_lesson_7 = QPushButton("       Lesson 7", self)
-        self.eng_lesson_8 = QPushButton("       Lesson 8", self)
-        self.eng_lesson_9 = QPushButton("       Lesson 9", self)
-        self.eng_lesson_10 = QPushButton("       Lesson 10", self)
-        self.eng_text_1 = QPushButton("Short literary text", self)
-        self.eng_text_2 = QPushButton("Average literary text", self)
-        self.eng_text_3 = QPushButton("Long literary text", self)
-        self.eng_random_text = QPushButton("Random text", self)
-        self.eng_my_text = QPushButton("Choose your own text", self)
-        self.eng_texts = [self.eng_lesson_1, self.eng_lesson_2, self.eng_lesson_3, self.eng_lesson_4,
-                          self.eng_lesson_5, self.eng_lesson_6, self.eng_lesson_7, self.eng_lesson_8,
-                          self.eng_lesson_9, self.eng_lesson_10, self.eng_text_1, self.eng_text_2,
-                          self.eng_text_3, self.eng_random_text, self.eng_my_text]
+        for name in eng_button_names:
+            button = QPushButton(name, self)
+            self.eng_texts.append(button)
 
     def configure_elements(self, ratio):
         with open(os.path.join('progress', 'progress.txt'), 'r') as f:
@@ -108,23 +73,23 @@ class TextSelection(QWidget):
 
     def assign_buttons(self):
         for k in range(len(self.rus_texts) - 2):
-            self.rus_texts[k].clicked.connect(partial(self.set_text, os.path.join('texts', 'rus_texts',
-                                                                                  't' + str(k) + '.txt'), k, 0))
+            self.rus_texts[k].clicked.connect(partial(self.set_text, os.path.join(
+                'texts', 'rus_texts', 't' + str(k) + '.txt'), k, 0))
             self.rus_texts[k].setAutoDefault(True)
         for k in range(len(self.eng_texts) - 2):
-            self.eng_texts[k].clicked.connect(partial(self.set_text, os.path.join('texts', 'eng_texts',
-                                                                                  't' + str(k) + '.txt'), k, 1))
+            self.eng_texts[k].clicked.connect(partial(self.set_text, os.path.join(
+                'texts', 'eng_texts', 't' + str(k) + '.txt'), k, 1))
             self.eng_texts[k].setAutoDefault(True)
-        self.rus_my_text.clicked.connect(self.get_text_file)
-        self.rus_my_text.setAutoDefault(True)
-        self.eng_my_text.clicked.connect(self.get_text_file)
-        self.eng_my_text.setAutoDefault(True)
-        self.rus_random_text.clicked.connect(lambda x: self.create_text(os.path.join('texts',
-                                                                                     'rus_texts', 'rus_words.txt'), 0))
-        self.rus_random_text.setAutoDefault(True)
-        self.eng_random_text.clicked.connect(lambda x: self.create_text(os.path.join('texts', 'eng_texts',
-                                                                                     'eng_words.txt'), 1))
-        self.eng_random_text.setAutoDefault(True)
+        self.rus_texts[len(self.rus_texts) - 1].clicked.connect(self.get_text_file)
+        self.rus_texts[len(self.rus_texts) - 1].setAutoDefault(True)
+        self.eng_texts[len(self.eng_texts) - 1].clicked.connect(self.get_text_file)
+        self.eng_texts[len(self.eng_texts) - 1].setAutoDefault(True)
+        self.rus_texts[len(self.rus_texts) - 2].clicked.connect(lambda x: self.create_text(os.path.join(
+            'texts', 'rus_texts', 'rus_words.txt'), 0))
+        self.rus_texts[len(self.rus_texts) - 2].setAutoDefault(True)
+        self.eng_texts[len(self.eng_texts) - 2].clicked.connect(lambda x: self.create_text(os.path.join(
+            'texts', 'eng_texts', 'eng_words.txt'), 1))
+        self.eng_texts[len(self.eng_texts) - 2].setAutoDefault(True)
 
     def change_resolution(self, ratio):
         self.setFixedSize(1280 * ratio, 720 * ratio)

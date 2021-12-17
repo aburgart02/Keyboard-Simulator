@@ -76,11 +76,13 @@ class MainWindow(QWidget):
         if self.isFullScreen():
             self.showNormal()
             self.set_background(1)
-            self.main_menu_widget.configure_elements(1)
+            self.main_menu_widget.application_width = self.width()
+            self.main_menu_widget.change_resolution(1)
         else:
             self.showFullScreen()
             self.set_background(self.resolution_ratio)
-            self.main_menu_widget.configure_elements(self.resolution_ratio)
+            self.main_menu_widget.application_width = self.width()
+            self.main_menu_widget.change_resolution(self.resolution_ratio)
 
     def change_widget_resolution(self, widget):
         widget.change_resolution(self.resolution_ratio) if self.isFullScreen() else widget.change_resolution(1)
@@ -117,10 +119,10 @@ class MainWindow(QWidget):
         self.text_selection_widget.show()
         if self.print_mode_selection_widget.keyboard_layout == 'rus':
             self.text_selection_widget.set_rus_texts()
-            self.text_selection_widget.rus_lesson_1.setFocus()
+            self.text_selection_widget.rus_texts[0].setFocus()
         else:
             self.text_selection_widget.set_eng_texts()
-            self.text_selection_widget.eng_lesson_1.setFocus()
+            self.text_selection_widget.eng_texts[0].setFocus()
 
     def close_application(self):
         self.close()

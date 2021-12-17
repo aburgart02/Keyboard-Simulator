@@ -2,7 +2,7 @@ import json
 import os.path
 import pyqtgraph
 from PyQt5.QtWidgets import QWidget, QPushButton, QGridLayout
-from settings import keys
+from key_handler import key_processing
 import styles
 
 
@@ -22,13 +22,7 @@ class Progress(QWidget):
         self.assign_buttons()
 
     def keyPressEvent(self, e):
-        if e.key() == keys['ESC_KEY']:
-            self.previous_window = True
-            self.application.switch_windows()
-        if e.key() == keys['F11_KEY']:
-            self.change_resolution(1) if self.application.isFullScreen() \
-                else self.change_resolution(self.application.resolution_ratio)
-            e.ignore()
+        key_processing(self, e)
 
     def create_statistics_graph(self, language):
         self.layout.removeWidget(self.graph)

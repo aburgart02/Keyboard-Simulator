@@ -1,6 +1,6 @@
 import os.path
 import settings
-from settings import keys
+from key_handler import key_processing
 from PyQt5 import QtGui, QtCore
 from PyQt5.QtGui import QPixmap, QFont
 from PyQt5.QtWidgets import QWidget, QLabel
@@ -42,13 +42,7 @@ class KeyboardSimulator(QWidget):
         self.global_timer.start(10)
 
     def keyPressEvent(self, e):
-        if e.key() == keys['ESC_KEY']:
-            self.previous_window = True
-            self.application.switch_windows()
-        if e.key() == keys['F11_KEY']:
-            self.change_resolution(1) if self.application.isFullScreen() \
-                else self.change_resolution(self.application.resolution_ratio)
-            e.ignore()
+        key_processing(self, e)
 
     def update_data(self):
         self.errors_counter.setText("Число ошибок: " + str(self.right_field.errors))

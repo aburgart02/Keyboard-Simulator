@@ -1,6 +1,6 @@
 import os.path
 import settings
-from settings import keys
+from key_handler import key_processing
 from PyQt5 import QtGui
 from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QIcon
@@ -32,13 +32,7 @@ class Settings(QWidget):
         self.configure_elements(1)
 
     def keyPressEvent(self, e):
-        if e.key() == keys['ESC_KEY']:
-            self.previous_window = True
-            self.application.switch_windows()
-        if e.key() == keys['F11_KEY']:
-            self.change_resolution(1) if self.application.isFullScreen() \
-                else self.change_resolution(self.application.resolution_ratio)
-            e.ignore()
+        key_processing(self, e)
 
     def configure_elements(self, ratio):
         self.volume_level_text.setFont(QtGui.QFont("Arial", 20, QtGui.QFont.Bold))
