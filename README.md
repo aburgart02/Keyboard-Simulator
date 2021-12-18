@@ -2,6 +2,10 @@ Keyboard-Simulator
 
 Проект для второй части курса по Python
 
+CLI:
+
+main.py
+
 Управление:
 
 Up Arrow, Down Arrow, Left Arrow, Right Arrow - Переключение между элементами
