@@ -60,12 +60,12 @@ class TextSelection(QWidget):
 
     def set_icon(self, button, count, ratio, progress_rus, progress_eng):
         if button in self.rus_texts:
-            if progress_rus[count]:
+            if progress_rus[count][0]:
                 button.setIcon(self.mark_picture)
             else:
                 button.setIcon(self.cross_picture)
         if button in self.eng_texts:
-            if progress_eng[count]:
+            if progress_eng[count][0]:
                 button.setIcon(self.mark_picture)
             else:
                 button.setIcon(self.cross_picture)

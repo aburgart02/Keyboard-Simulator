@@ -76,7 +76,8 @@ class KeyboardSimulator(QWidget):
         self.show_result()
         self.is_finished = True
         if self.check_requirements():
-            self.statistics_recorder = StatisticsRecorder(self.text_id, self.text_language, self.speed_counter)
+            self.statistics_recorder = StatisticsRecorder(self.text_id, self.text_language, self.speed_counter,
+                                                          self.accuracy_counter)
             self.statistics_recorder.record_statistics()
 
     def show_result(self):
