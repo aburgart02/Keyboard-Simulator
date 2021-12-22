@@ -36,6 +36,7 @@ class MainWindow(QWidget):
                              (self.progress_widget, self.main_menu_widget.show)]
         self.hide_windows()
         self.set_background(1)
+        self.main_menu_widget.assign_buttons(self)
         self.show()
 
     def keyPressEvent(self, e):
@@ -76,12 +77,10 @@ class MainWindow(QWidget):
         if self.isFullScreen():
             self.showNormal()
             self.set_background(1)
-            self.main_menu_widget.application_width = self.width()
             self.main_menu_widget.change_resolution(1)
         else:
             self.showFullScreen()
             self.set_background(self.resolution_ratio)
-            self.main_menu_widget.application_width = self.width()
             self.main_menu_widget.change_resolution(self.resolution_ratio)
 
     def change_widget_resolution(self, widget):
